@@ -483,11 +483,7 @@
   <entry>
     <title>BS4实现简易起点小说爬虫</title>
     <url>/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前两天写了一个针对福利吧的爬虫：</p>
-<blockquote>
-<p><a href="https://bakaft.me/?p=164" target="_blank" rel="noopener">https://bakaft.me/?p=164</a></p>
-<p>使用BeautifulSoup和Requests实现一个简单的图片爬虫</p>
-</blockquote>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前两天写了一个针对福利吧的爬虫</p>
 <p>总体来说比较简单，毕竟WordPress本身的文章页面结构比较规则，而且爬取的页面只有图片，筛选较为容易，找到图片后也不需要什么处理，下载就完事了。</p>
 <p>这次搞个小说爬虫，可以做个练手熟悉一下这些内容</p>
 <ul>
