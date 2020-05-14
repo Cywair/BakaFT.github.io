@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    利用API获取学堂在线课堂练习答案 |  BakaFT&#39;s blog
+    About me |  BakaFT&#39;s blog
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -41,7 +41,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-利用API获取学堂在线课堂练习答案" class="article article-type-post" itemscope
+  <article id="page-" class="article article-type-page" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -49,7 +49,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  利用API获取学堂在线课堂练习答案
+  About me
 </h1>
  
 
@@ -57,47 +57,6 @@
     
 
     
-    <div class="article-meta">
-      <a href="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/" class="article-date">
-  <time datetime="2020-05-14T11:33:37.000Z" itemprop="datePublished">2020-05-14</time>
-</a>
-      
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
-  </div>
-
-      
-      
-<div class="word_count">
-    <span class="post-time">
-        <span class="post-meta-item-icon">
-            <i class="ri-quill-pen-line"></i>
-            <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">534</span>
-        </span>
-    </span>
-
-    <span class="post-time">
-        &nbsp; | &nbsp;
-        <span class="post-meta-item-icon">
-            <i class="ri-book-open-line"></i>
-            <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
-        </span>
-    </span>
-</div>
-
-      
-    </div>
-    
-
-    
-    
-    <div class="tocbot"></div>
-
-
-
-
 
     
 
@@ -107,48 +66,12 @@
       
 
       
-      <h2 id="补充-本文仅仅涉及到单选题"><a href="#补充-本文仅仅涉及到单选题" class="headerlink" title="补充:本文仅仅涉及到单选题"></a>补充:本文仅仅涉及到单选题</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文内容会涉及到以下文章的内容，建议首先阅读以下文章</p>
-<blockquote>
-<p><a href="https://www.cnblogs.com/bakaft/p/12670088.html" target="_blank" rel="noopener">https://www.cnblogs.com/bakaft/p/12670088.html</a></p>
-<p>学堂在线课程页面URL和JSON的简单分析</p>
+      <blockquote>
+<p>Stay hungry, stay foolish</p>
 </blockquote>
-<h2 id="先康康效果"><a href="#先康康效果" class="headerlink" title="先康康效果"></a>先康康效果</h2><p><img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/1.png" alt="1"></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>学堂在线的课堂练习题目通过下面这个API返回</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-<p>其中的 224269 在后文会提及     </p>
-<p>发送GET请求时应携带cookies</p>
-<p>API返回形式:json</p>
-</blockquote>
-<p>之前看到有人写了个优学院(Ulearning)自动答题脚本，原理就是利用了优学院的获取答案的API</p>
-<p>我就想看看，这个json里会不会有答案呢？</p>
-<p>结果看了一下，还真就有。。</p>
-<p>JSON结构在这里不多分析了，直接看答案在哪</p>
-<p>如图<img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/2.png" alt="2"></p>
-<p>JSON-data-probelms-x(问题序号,从0开始)-user-answer</p>
-<p>(原谅我笨拙的表达方法..不太懂json)</p>
-<h2 id="简单的python实现"><a href="#简单的python实现" class="headerlink" title="简单的python实现"></a>简单的python实现</h2><p>拿这个练习举例</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122</a></p>
-</blockquote>
-<blockquote>
-<p>然而，它最终对应的题目数据API链接是</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-</blockquote>
-<p>这里，1340122就是<strong>上篇文章</strong>提到的页id，而这个 <code>224269</code> ，方便起见，我这里就叫它 <code>答案ID</code> 吧</p>
-<p>那么这个答案ID是怎么来的？</p>
-<blockquote>
-<p>在这个API返回的json里</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376</a></p>
-<p>这个URL的参数在上篇文章都有提及</p>
-<p>请带cookies发送GET请求</p>
-<p>通过这个，可以查询到当前 <code>页</code>的信息，也就是 <code>leaf_info</code></p>
-<p>其中可以提取到 <code>leaf_type_id</code> ，也就是我说的 <code>答案ID</code> </p>
-<p>目前来看，只有 <code>exercise</code>  和<code>quiz</code>类型的 <code>页</code> 对象 才会有具体值,其他对象的 <code>leaf_type_id</code> 值为 <code>null</code></p>
-</blockquote>
-<p>完成上面的理解之后，就可以拿Python来写个小程序实现一下</p>
-<p>代码风格不太健康，仅供参考</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers =&#123;&#125;  <span class="comment">#只需要提供cookie就好</span></span><br><span class="line">response = requests.get(<span class="string">'https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224270/'</span>, headers=headers)</span><br><span class="line"></span><br><span class="line">Dict = response.json() <span class="comment">#把json直接转成dict</span></span><br><span class="line">problems = Dict[<span class="string">'data'</span>][<span class="string">'problems'</span>]</span><br><span class="line">answers = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> problem <span class="keyword">in</span> problems:</span><br><span class="line">    answer = problem[<span class="string">'user'</span>][<span class="string">'answer'</span>][<span class="number">0</span>]</span><br><span class="line">    answers = answers + answer</span><br><span class="line">print(<span class="string">'答案就是！！'</span> + answers)</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#答案就是！！CCCAACCCCBAC</span></span><br></pre></td></tr></table></figure>
+<p>Undergraduate @ Yangtze University</p>
+<p>GitHub: @BakaFT</p>
+
       
       <!-- reward -->
       
@@ -202,15 +125,13 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://baidu.com/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://baidu.com/about/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/API/" rel="tag">API</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF/" rel="tag">学堂在线</a></li></ul>
-
 
     </footer>
 
@@ -218,32 +139,11 @@
 
   
   
-  <nav class="article-nav">
-    
-      <a href="/2020/05/14/%E5%8A%A8%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%BE%E5%A0%82%E5%9C%A8%E7%BA%BF%E7%AD%94%E6%A1%88%E8%8E%B7%E5%8F%96%E5%B7%A5%E5%85%B7/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            动手写一个课堂在线答案获取工具
-          
-        </div>
-      </a>
-    
-    
-      <a href="/2020/05/14/%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E7%A8%8B%E9%A1%B5%E9%9D%A2URL%E5%92%8CJSON%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" class="article-nav-link">
-        <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">学堂在线课程页面URL和JSON的简单分析</div>
-      </a>
-    
-  </nav>
-
 
   
 
   
 
-  
-  
   
   
   
@@ -398,23 +298,6 @@
 </script>
 
 <!-- Tocbot -->
-
-
-<script src="/js/tocbot.min.js"></script>
-
-<script>
-  tocbot.init({
-    tocSelector: '.tocbot',
-    contentSelector: '.article-entry',
-    headingSelector: 'h1, h2, h3, h4, h5, h6',
-    hasInnerContainers: true,
-    scrollSmooth: true,
-    scrollContainer: 'main',
-    positionFixedSelector: '.tocbot',
-    positionFixedClass: 'is-position-fixed',
-    fixedSidebarOffset: 'auto'
-  });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
