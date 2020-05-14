@@ -60,7 +60,8 @@
   <entry>
     <title>动手写一个课堂在线答案获取工具</title>
     <url>/2020/05/14/%E5%8A%A8%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%BE%E5%A0%82%E5%9C%A8%E7%BA%BF%E7%AD%94%E6%A1%88%E8%8E%B7%E5%8F%96%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>通过这个API获取所有的 <code>leaf_id</code></p>
+    <content><![CDATA[<h2 id="已发布至GitHub"><a href="#已发布至GitHub" class="headerlink" title="已发布至GitHub"></a>已发布至GitHub</h2><p><a href="https://github.com/BakaFT/XuetangX-GetAnswer" target="_blank" rel="noopener">https://github.com/BakaFT/XuetangX-GetAnswer</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>通过这个API获取所有的 <code>leaf_id</code></p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;next.xuetangx.com&#x2F;api&#x2F;v1&#x2F;lms&#x2F;learn&#x2F;course&#x2F;chapter?cid&#x3D;1515741&amp;sign&#x3D;THU08091000247&amp;etag_id&#x3D;11</span><br><span class="line">其实就是在请求获取章节目录的API时增加了一个参数 etag_id&#x3D;11，使得返回值只有作业章节</span><br></pre></td></tr></table></figure>
 </blockquote>
