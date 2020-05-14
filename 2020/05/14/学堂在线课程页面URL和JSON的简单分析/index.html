@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学堂在线课程页面URL和JSON的简单分析学堂在线课程URL分析以清华大学的C++语言程序设计基础(2020春)和生活英语听说(2020春)为例 课程界面如下  目录中有5种单元对象:    对象 例子    视频(video) https:&#x2F;&#x2F;next.xuetangx.com&#x2F;learn&#x2F;THU08091000247&#x2F;THU08091000247&#x2F;1515741&#x2F;video&#x2F;1358540">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学堂在线课程页面URL和JSON的简单分析">
+<meta property="og:url" content="http://baidu.com/2020/05/14/%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E7%A8%8B%E9%A1%B5%E9%9D%A2URL%E5%92%8CJSON%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="BakaFT&#39;s blog">
+<meta property="og:description" content="学堂在线课程页面URL和JSON的简单分析学堂在线课程URL分析以清华大学的C++语言程序设计基础(2020春)和生活英语听说(2020春)为例 课程界面如下  目录中有5种单元对象:    对象 例子    视频(video) https:&#x2F;&#x2F;next.xuetangx.com&#x2F;learn&#x2F;THU08091000247&#x2F;THU08091000247&#x2F;1515741&#x2F;video&#x2F;1358540">
+<meta property="og:image" content="http://baidu.com/.com//1.png">
+<meta property="og:image" content="http://baidu.com/.com//2.png">
+<meta property="og:image" content="http://baidu.com/.com//3.png">
+<meta property="article:published_time" content="2020-05-14T11:33:37.000Z">
+<meta property="article:modified_time" content="2020-05-14T11:39:15.968Z">
+<meta property="article:author" content="BakaFT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://baidu.com/.com//1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://baidu.com/2020/05/14/学堂在线课程页面URL和JSON的简单分析/"/>
+
+
+
+
+
+  <title>学堂在线课程页面URL和JSON的简单分析 | BakaFT's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BakaFT's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A simple diary</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://baidu.com/2020/05/14/%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E7%A8%8B%E9%A1%B5%E9%9D%A2URL%E5%92%8CJSON%E7%9A%84%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BakaFT">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BakaFT's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">学堂在线课程页面URL和JSON的简单分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-14T19:33:37+08:00">
+                2020-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学堂在线课程页面URL和JSON的简单分析"><a href="#学堂在线课程页面URL和JSON的简单分析" class="headerlink" title="学堂在线课程页面URL和JSON的简单分析"></a>学堂在线课程页面URL和JSON的简单分析</h1><h2 id="学堂在线课程URL分析"><a href="#学堂在线课程URL分析" class="headerlink" title="学堂在线课程URL分析"></a>学堂在线课程URL分析</h2><p>以<strong>清华大学</strong>的<strong>C++语言程序设计基础(2020春)</strong>和<strong>生活英语听说(2020春)</strong>为例</p>
+<p>课程界面如下</p>
+<p><img src="/.com//1.png" alt="1"></p>
+<p>目录中有5种单元对象:</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>视频(video)</td>
+<td><a href="https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/video/1358540" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/video/1358540</a></td>
+</tr>
+<tr>
+<td>图文(article)</td>
+<td><a href="https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/article/1358541" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/article/1358541</a></td>
+</tr>
+<tr>
+<td>作业(exercise)</td>
+<td><a href="https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/exercise/1358558" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU08091000247/THU08091000247/1515741/exercise/1358558</a></td>
+</tr>
+<tr>
+<td>考试(quiz)</td>
+<td><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/quiz/1340243" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/quiz/1340243</a>  <strong>(清华大学-生活英语听说(2020春)</strong></td>
+</tr>
+<tr>
+<td>讨论(discussion)</td>
+<td><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/discussion/3934275" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/discussion/3934275</a> <strong>(清华大学-生活英语听说(2020春)</strong></td>
+</tr>
+</tbody></table>
+<p>可以看出，URL规则比较简单</p>
+<p>首先是</p>
+<blockquote>
+<p>next.xuetangx.com/learn/</p>
+</blockquote>
+<p>紧接着是重复了两次的数字</p>
+<blockquote>
+<p>THU 0809 1000 247 <strong>C++</strong></p>
+<p>THU 0502 1000 376 <strong>英语听说</strong></p>
+<p>THU就是清华咯，0809应该是课程提交日期，1000摸不透，247应该是该学校上传课程的顺序ID。</p>
+</blockquote>
+<p>再接着是一个数字串，应该与课程ID相关</p>
+<blockquote>
+<p>1515481</p>
+</blockquote>
+<p>最后就是单元类型和这个单元的ID了</p>
+<blockquote>
+<p>article/135854</p>
+<p>quiz/1340243</p>
+<p><strong>注:只有这串数字ID在Json里有被返回</strong></p>
+</blockquote>
+<h2 id="课程页面返回的Json分析"><a href="#课程页面返回的Json分析" class="headerlink" title="课程页面返回的Json分析"></a>课程页面返回的Json分析</h2><p>一个课程的目录信息列表可以通过GET请求下面这样的URL得到(需要带cookies)</p>
+<blockquote>
+<p><a href="https://next.xuetangx.com/api/v1/lms/learn/course/chapter?cid=1515481&amp;sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/course/chapter?cid=1515481&amp;sign=THU05021000376</a></p>
+<p>返回形式: json </p>
+<p>里面还有很多我没看懂的返回值，有兴趣可以自行研究</p>
+</blockquote>
+<p>这里拿 <strong>生活英语听说</strong> 做例子</p>
+<p>这里先提前把Json的结构理一下</p>
+<p>从外到里，一个目录的结构应该为</p>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>名称</th>
+<th>注解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>course</td>
+<td>课</td>
+</tr>
+<tr>
+<td>2</td>
+<td>chapter</td>
+<td>章</td>
+</tr>
+<tr>
+<td>3</td>
+<td>section</td>
+<td>节</td>
+</tr>
+<tr>
+<td>4</td>
+<td>leaf</td>
+<td>页(直译有丶抽象)</td>
+</tr>
+</tbody></table>
+<p>拿截图来对应一下</p>
+<p><img src="/.com//2.png" alt="2"></p>
+<p>了解完这个层次之后，后面就好理解一些了</p>
+<p>拿到Json后，拖到Bejson看一下</p>
+<p><img src="/.com//3.png" alt="3"></p>
+<p>可以看到，所有数据都在名为 <code>data</code> 的JsonObject里</p>
+<table>
+<thead>
+<tr>
+<th>course_id</th>
+<th>课的id咯</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>course_name</td>
+<td>课名</td>
+</tr>
+<tr>
+<td>course_chapter</td>
+<td>该课的所有章的集合</td>
+</tr>
+</tbody></table>
+<p>从0开始，<code>course_chapter</code>里每一个JsonObject代表一个章</p>
+<p>这里的10个JsonObject恰好与目录的10个单元相对应</p>
+<p>这里展开 <code>0</code>代表的第一章 后可以看到一些数据</p>
+<table>
+<thead>
+<tr>
+<th>order</th>
+<th>章的绝对顺序,0开始</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>章的ID</td>
+</tr>
+<tr>
+<td>name</td>
+<td>章名</td>
+</tr>
+<tr>
+<td>section_leaf_list</td>
+<td>该章的所有节的集合</td>
+</tr>
+</tbody></table>
+<p>类似地，</p>
+<p>从0开始,<code>sectiopn_leaf_list</code>里每一个JsonObject代表一个节</p>
+<p>这里11个JsonObject恰好与第一章中的10个小节对应</p>
+<p>这里展开 <code>0</code> 代表的第一节，可以看到以下数据</p>
+<table>
+<thead>
+<tr>
+<th>order</th>
+<th>节的绝对顺序,0开始</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>chapter_id</td>
+<td>章的id</td>
+</tr>
+<tr>
+<td>id</td>
+<td>节的id</td>
+</tr>
+<tr>
+<td>name</td>
+<td>节名</td>
+</tr>
+<tr>
+<td>leaf_list</td>
+<td>该节所有页的集合</td>
+</tr>
+</tbody></table>
+<p>类似地,</p>
+<p>从0开始,<code>leaf_list</code>里地每一个JsonObject代表一个页</p>
+<p>这里1个JsonObject恰好与第一章第一节中的1个页对应</p>
+<p>这里展开 <code>0</code>代表的第一页(也是唯一一页),可以看到以下内容</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>页名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>is_locked</td>
+<td>锁定状态，这个可能会用于quiz类型的单元，用于限制学生对单元的访问，比如考完后该项直接改为true，禁止重考</td>
+</tr>
+<tr>
+<td>start_time</td>
+<td>毫秒制的unix时间戳，代表第一次观看时间</td>
+</tr>
+<tr>
+<td>chapter_id</td>
+<td>章id</td>
+</tr>
+<tr>
+<td>section_id</td>
+<td>节id</td>
+</tr>
+<tr>
+<td>leaf_type</td>
+<td>目前我还没看到其他的type</td>
+</tr>
+<tr>
+<td>id</td>
+<td>页的id   <strong>(这个就是URL的最后一部分数字)</strong></td>
+</tr>
+<tr>
+<td>is_show</td>
+<td>不清楚，该页是否可见？</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>第一次看完的时间？为什么我这里看过了但是值是0呢</td>
+</tr>
+<tr>
+<td>score_deadline</td>
+<td>观看截止日期</td>
+</tr>
+<tr>
+<td>is_score</td>
+<td>不清楚</td>
+</tr>
+<tr>
+<td>is_assessed</td>
+<td>不清楚</td>
+</tr>
+<tr>
+<td>order</td>
+<td>页的绝对顺序,0开始</td>
+</tr>
+<tr>
+<td>leafinfo_id</td>
+<td>页信息id (<strong>虽然不知道这id用来干啥的..</strong>)</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/" rel="next" title="利用API获取学堂在线课堂练习答案">
+                <i class="fa fa-chevron-left"></i> 利用API获取学堂在线课堂练习答案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/14/%E5%8A%A8%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%BE%E5%A0%82%E5%9C%A8%E7%BA%BF%E7%AD%94%E6%A1%88%E8%8E%B7%E5%8F%96%E5%B7%A5%E5%85%B7/" rel="prev" title="动手写一个课堂在线答案获取工具">
+                动手写一个课堂在线答案获取工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="BakaFT" />
+            
+              <p class="site-author-name" itemprop="name">BakaFT</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/BakaFT" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1355564740@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学堂在线课程页面URL和JSON的简单分析"><span class="nav-number">1.</span> <span class="nav-text">学堂在线课程页面URL和JSON的简单分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#学堂在线课程URL分析"><span class="nav-number">1.1.</span> <span class="nav-text">学堂在线课程URL分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#课程页面返回的Json分析"><span class="nav-number">1.2.</span> <span class="nav-text">课程页面返回的Json分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BakaFT</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/jquery/jquery@2.1.3/dist/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
