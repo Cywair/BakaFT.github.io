@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>利用API获取学堂在线课堂练习答案</title>
-    <url>/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/</url>
-    <content><![CDATA[<h2 id="补充-本文仅仅涉及到单选题"><a href="#补充-本文仅仅涉及到单选题" class="headerlink" title="补充:本文仅仅涉及到单选题"></a>补充:本文仅仅涉及到单选题</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文内容会涉及到以下文章的内容，建议首先阅读以下文章</p>
-<blockquote>
-<p><a href="https://www.cnblogs.com/bakaft/p/12670088.html" target="_blank" rel="noopener">https://www.cnblogs.com/bakaft/p/12670088.html</a></p>
-<p>学堂在线课程页面URL和JSON的简单分析</p>
+    <title>为什么INT_MAX和INT_MIN绝对值不相等</title>
+    <url>/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/</url>
+    <content><![CDATA[<blockquote>
+<p> -2147483648 ~ +2147483647  (4 Bytes) </p>
+<p>INT的数据范围, 模为2^32</p>
 </blockquote>
-<h2 id="先康康效果"><a href="#先康康效果" class="headerlink" title="先康康效果"></a>先康康效果</h2><p><img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/1.png" alt="1"></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>学堂在线的课堂练习题目通过下面这个API返回</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-<p>其中的 224269 在后文会提及     </p>
-<p>发送GET请求时应携带cookies</p>
-<p>API返回形式:json</p>
-</blockquote>
-<p>之前看到有人写了个优学院(Ulearning)自动答题脚本，原理就是利用了优学院的获取答案的API</p>
-<p>我就想看看，这个json里会不会有答案呢？</p>
-<p>结果看了一下，还真就有。。</p>
-<p>JSON结构在这里不多分析了，直接看答案在哪</p>
-<p>如图<img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/2.png" alt="2"></p>
-<p>JSON-data-probelms-x(问题序号,从0开始)-user-answer</p>
-<p>(原谅我笨拙的表达方法..不太懂json)</p>
-<h2 id="简单的python实现"><a href="#简单的python实现" class="headerlink" title="简单的python实现"></a>简单的python实现</h2><p>拿这个练习举例</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122</a></p>
-</blockquote>
-<blockquote>
-<p>然而，它最终对应的题目数据API链接是</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-</blockquote>
-<p>这里，1340122就是<strong>上篇文章</strong>提到的页id，而这个 <code>224269</code> ，方便起见，我这里就叫它 <code>答案ID</code> 吧</p>
-<p>那么这个答案ID是怎么来的？</p>
-<blockquote>
-<p>在这个API返回的json里</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376</a></p>
-<p>这个URL的参数在上篇文章都有提及</p>
-<p>请带cookies发送GET请求</p>
-<p>通过这个，可以查询到当前 <code>页</code>的信息，也就是 <code>leaf_info</code></p>
-<p>其中可以提取到 <code>leaf_type_id</code> ，也就是我说的 <code>答案ID</code> </p>
-<p>目前来看，只有 <code>exercise</code>  和<code>quiz</code>类型的 <code>页</code> 对象 才会有具体值,其他对象的 <code>leaf_type_id</code> 值为 <code>null</code></p>
-</blockquote>
-<p>完成上面的理解之后，就可以拿Python来写个小程序实现一下</p>
-<p>代码风格不太健康，仅供参考</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers =&#123;&#125;  <span class="comment">#只需要提供cookie就好</span></span><br><span class="line">response = requests.get(<span class="string">'https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224270/'</span>, headers=headers)</span><br><span class="line"></span><br><span class="line">Dict = response.json() <span class="comment">#把json直接转成dict</span></span><br><span class="line">problems = Dict[<span class="string">'data'</span>][<span class="string">'problems'</span>]</span><br><span class="line">answers = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> problem <span class="keyword">in</span> problems:</span><br><span class="line">    answer = problem[<span class="string">'user'</span>][<span class="string">'answer'</span>][<span class="number">0</span>]</span><br><span class="line">    answers = answers + answer</span><br><span class="line">print(<span class="string">'答案就是！！'</span> + answers)</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#答案就是！！CCCAACCCCBAC</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>瞎折腾</category>
-      </categories>
+<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>其中最高位是符号位，0正1负。</p>
+<p>计算机中数据储存采用补码形式，这意味着+0和-0的表达方式是一样的，都是</p>
+<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>这也导致，没有任何数的补码为 1000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>本着不浪费的原则，于是规定该补码储存 <strong>-(int_max + 1)</strong></p>
+<p>于是出现了数据范围不对称的情况。</p>
+<p>另外，这样也可以解释为什么 2147483647 + 1会溢出变成-2147483648</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">2147483647</span>; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d and %d"</span>,i, i+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*   output : 2147483647 and -2147483648 */</span></span><br></pre></td></tr></table></figure>
+
+<p>因为2147483647的补码是</p>
+<p>0111 1111 1111 1111 1111 1111 1111 1111</p>
+<p>+1之后正好是</p>
+<p>1000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>也就是 -2147483648 的补码</p>
+]]></content>
       <tags>
-        <tag>学堂在线</tag>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python实现dec转hex,bin并打印步骤</title>
+    <url>/2020/02/20/Python%E5%AE%9E%E7%8E%B0dec%E8%BD%AChex-bin%E5%B9%B6%E6%89%93%E5%8D%B0%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<blockquote>
+<p>计算机基础课程的作业：</p>
+<p>将十进制数35.75分别转换成二进制数与十六进制数 ，并附计算过程</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">decs = [<span class="number">35.75</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Bin</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'待转换数字为:'</span> + str(dec))</span><br><span class="line">        print(<span class="string">'---转换为二进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span>+str(big))</span><br><span class="line">        quotient = big//<span class="number">2</span></span><br><span class="line">        module = big%<span class="number">2</span></span><br><span class="line">        print(str(big)+<span class="string">'/2 = '</span>+str(quotient)+<span class="string">'...'</span>+str(module))</span><br><span class="line">        bin1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">2</span></span><br><span class="line">            quotient = quotient//<span class="number">2</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/2 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            bin1 = str(module) + bin1</span><br><span class="line">        <span class="comment">#小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span>+<span class="string">'%.2f'</span>%small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small*<span class="number">2</span></span><br><span class="line">                printint = int(small)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall +<span class="string">'*2 = '</span>+ <span class="string">'%.2f'</span>%small +<span class="string">'...'</span>+ str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">1</span>)</span><br><span class="line">                    small = small - <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(bin2) &gt; <span class="number">5</span>: <span class="comment">#二进制小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            bin2 = <span class="string">'.'</span> + bin2</span><br><span class="line">        print(str(dec)+<span class="string">'的二进制表示是'</span>+bin1+bin2+ <span class="string">'(小数点后保留6位)\n'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Hex</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'---转换为十六进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span> + str(big))</span><br><span class="line">        quotient = big // <span class="number">16</span></span><br><span class="line">        module = big % <span class="number">16</span></span><br><span class="line">        print(str(big)+ <span class="string">'/16 = '</span> +str(quotient)+ <span class="string">'...'</span> +str(module))</span><br><span class="line">        hex1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">16</span></span><br><span class="line">            quotient = quotient // <span class="number">16</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/16 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            hex1 = str(module) + hex1</span><br><span class="line">        <span class="comment"># 小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span> + <span class="string">'%.2f'</span> % small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small * <span class="number">16</span></span><br><span class="line">                printint = str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall + <span class="string">'*16 = '</span> + <span class="string">'%.2f'</span>%small + <span class="string">'...'</span> +str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    hex2 = hex2 + str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                    small = small - int(small)</span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    hex2 = hex2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(hex2) &gt; <span class="number">5</span>:  <span class="comment"># 小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            hex2 = <span class="string">'.'</span>+hex2</span><br><span class="line">        print(str(dec)+<span class="string">'的十六进制表示是'</span>+hex1+hex2+ <span class="string">'(小数保留6位)'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Dec2Bin(decs)</span><br><span class="line">Dec2Hex(decs)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
         <tag>Python</tag>
-        <tag>API</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么1/2=0?</title>
+    <url>/2020/02/26/%E4%B8%BA%E4%BB%80%E4%B9%881-2-0/</url>
+    <content><![CDATA[<blockquote>
+<p>C primer plus 课后作业 3.11.8</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cup; <span class="comment">//1cup=0.5pint=8ounce=16big=48small</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"How many cups?\n"</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;cup);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d Cup is %f in pint,%d in ounce,%d in big and %d in small"</span>,cup, cup/<span class="number">2</span>, cup*<span class="number">8</span>, cup*<span class="number">16</span>, cup*<span class="number">48</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//output: 1 Cup is 0 in pint,8 in ouns,16 in big and 48 in small</span></span><br><span class="line"><span class="comment">//cup/2改成cup*0.5</span></span><br><span class="line"><span class="comment">//output: 1 Cup is 0.500000 in pint,8 in ounce,16 in big and 48 in small</span></span><br></pre></td></tr></table></figure>
+
+<p>查阅发现<br>C的除法，当两边都是int型数时，做整除运算，1/2=0<br>如果两边至少有一个为float或者double，那么将做一般的除法，1.0/2=0.5 。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">float</span> c=<span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f"</span>,cup/c); </span><br><span class="line"><span class="comment">//output : 0.500000</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -113,8 +116,62 @@
         <category>瞎折腾</category>
       </categories>
       <tags>
-        <tag>学堂在线</tag>
         <tag>Python</tag>
+        <tag>学堂在线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用API获取学堂在线课堂练习答案</title>
+    <url>/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/</url>
+    <content><![CDATA[<h2 id="补充-本文仅仅涉及到单选题"><a href="#补充-本文仅仅涉及到单选题" class="headerlink" title="补充:本文仅仅涉及到单选题"></a>补充:本文仅仅涉及到单选题</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文内容会涉及到以下文章的内容，建议首先阅读以下文章</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/bakaft/p/12670088.html" target="_blank" rel="noopener">https://www.cnblogs.com/bakaft/p/12670088.html</a></p>
+<p>学堂在线课程页面URL和JSON的简单分析</p>
+</blockquote>
+<h2 id="先康康效果"><a href="#先康康效果" class="headerlink" title="先康康效果"></a>先康康效果</h2><p><img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/1.png" alt="1"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>学堂在线的课堂练习题目通过下面这个API返回</p>
+<blockquote>
+<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
+<p>其中的 224269 在后文会提及     </p>
+<p>发送GET请求时应携带cookies</p>
+<p>API返回形式:json</p>
+</blockquote>
+<p>之前看到有人写了个优学院(Ulearning)自动答题脚本，原理就是利用了优学院的获取答案的API</p>
+<p>我就想看看，这个json里会不会有答案呢？</p>
+<p>结果看了一下，还真就有。。</p>
+<p>JSON结构在这里不多分析了，直接看答案在哪</p>
+<p>如图<img src="/2020/05/14/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/2.png" alt="2"></p>
+<p>JSON-data-probelms-x(问题序号,从0开始)-user-answer</p>
+<p>(原谅我笨拙的表达方法..不太懂json)</p>
+<h2 id="简单的python实现"><a href="#简单的python实现" class="headerlink" title="简单的python实现"></a>简单的python实现</h2><p>拿这个练习举例</p>
+<blockquote>
+<p><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122</a></p>
+</blockquote>
+<blockquote>
+<p>然而，它最终对应的题目数据API链接是</p>
+<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
+</blockquote>
+<p>这里，1340122就是<strong>上篇文章</strong>提到的页id，而这个 <code>224269</code> ，方便起见，我这里就叫它 <code>答案ID</code> 吧</p>
+<p>那么这个答案ID是怎么来的？</p>
+<blockquote>
+<p>在这个API返回的json里</p>
+<p><a href="https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376</a></p>
+<p>这个URL的参数在上篇文章都有提及</p>
+<p>请带cookies发送GET请求</p>
+<p>通过这个，可以查询到当前 <code>页</code>的信息，也就是 <code>leaf_info</code></p>
+<p>其中可以提取到 <code>leaf_type_id</code> ，也就是我说的 <code>答案ID</code> </p>
+<p>目前来看，只有 <code>exercise</code>  和<code>quiz</code>类型的 <code>页</code> 对象 才会有具体值,其他对象的 <code>leaf_type_id</code> 值为 <code>null</code></p>
+</blockquote>
+<p>完成上面的理解之后，就可以拿Python来写个小程序实现一下</p>
+<p>代码风格不太健康，仅供参考</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers =&#123;&#125;  <span class="comment">#只需要提供cookie就好</span></span><br><span class="line">response = requests.get(<span class="string">'https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224270/'</span>, headers=headers)</span><br><span class="line"></span><br><span class="line">Dict = response.json() <span class="comment">#把json直接转成dict</span></span><br><span class="line">problems = Dict[<span class="string">'data'</span>][<span class="string">'problems'</span>]</span><br><span class="line">answers = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> problem <span class="keyword">in</span> problems:</span><br><span class="line">    answer = problem[<span class="string">'user'</span>][<span class="string">'answer'</span>][<span class="number">0</span>]</span><br><span class="line">    answers = answers + answer</span><br><span class="line">print(<span class="string">'答案就是！！'</span> + answers)</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#答案就是！！CCCAACCCCBAC</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>瞎折腾</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>学堂在线</tag>
+        <tag>API</tag>
       </tags>
   </entry>
   <entry>
@@ -354,6 +411,164 @@
       </categories>
       <tags>
         <tag>学堂在线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用BeautifulSoup和Requests实现一个简单的图片爬虫</title>
+    <url>/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h3><p>最近的这段时间是真的难熬，每天在家坐着不能出去，甚至玩游戏都觉得无聊，自己又不爱看小说电影电视剧。总该干点有意思的事情吧？</p>
+<p>考虑到开学后要申请转入计算机科学专业，不如自己先学点有意思的，入门一下Python吧。</p>
+<p>我比较喜欢任务型学习，而不是过早的将最抽象最晦涩的定义熟悉个遍，就像第一次玩PUBG不是要记住各种武器参数而是直接进去突突突。</p>
+<p>我一直对爬虫比较感兴趣，也想自己做一个，于是我首先尝试使用BeautifulSoup进行了一次爬虫实验。</p>
+<p>我觉得爬虫里最简单的应该是图片爬虫，解析数据，拿到图片链接，下载保存就好了。</p>
+<h3 id="2-爬什么地方的图？"><a href="#2-爬什么地方的图？" class="headerlink" title="2.爬什么地方的图？"></a>2.爬什么地方的图？</h3><p>哪里有大量图片让我爬。。？我也不知道为什么就想到了</p>
+<blockquote>
+<p><a href="https://fulibus.net/" target="_blank" rel="noopener">https://fulibus.net/</a></p>
+<p>福利吧的福利汇总合集系列有大量的图片，并且网站使用的是WordPress,页面结构比较整齐。</p>
+</blockquote>
+<h4 id="内容不重要，主要是学习一下爬虫的运用"><a href="#内容不重要，主要是学习一下爬虫的运用" class="headerlink" title="内容不重要，主要是学习一下爬虫的运用"></a>内容不重要，主要是学习一下爬虫的运用</h4><p>多打开几个福利汇总的文章，观察一下链接，可以比较容易的得到规律</p>
+<blockquote>
+<p><a href="https://fulibus.net/2019090.html/2" target="_blank" rel="noopener">https://fulibus.net/2019090.html</a></p>
+<p>2019福利汇总第90期</p>
+<p><a href="https://fulibus.net/2020001.html" target="_blank" rel="noopener">https://fulibus.net/2020001.html</a><br>2020福利汇总第1期</p>
+</blockquote>
+<p>在这里，我通过Excel快速的生成了一个链接列表并检查了链接的HTTP状态，并将有效链接整理到url.txt，内容如下</p>
+<p><a href="https://fulibus.net/2020001.html" target="_blank" rel="noopener">https://fulibus.net/2020001.html</a><br><a href="https://fulibus.net/2020002.html" target="_blank" rel="noopener">https://fulibus.net/2020002.html</a><br><a href="https://fulibus.net/2020003.html" target="_blank" rel="noopener">https://fulibus.net/2020003.html</a><br>….<br><a href="https://fulibus.net/2020015.html" target="_blank" rel="noopener">https://fulibus.net/2020015.html</a><br><a href="https://fulibus.net/2019089.html" target="_blank" rel="noopener">https://fulibus.net/2019089.html</a><br>..<br><a href="https://fulibus.net/2019178.html" target="_blank" rel="noopener">https://fulibus.net/2019178.html</a></p>
+<p>不过，我要爬的图都在福利集合的第二页，所以url.txt的内容需要稍做处理</p>
+<p><a href="https://fulibus.net/2020001.html/2" target="_blank" rel="noopener">https://fulibus.net/2020001.html/2</a><br><a href="https://fulibus.net/2020002.html/2" target="_blank" rel="noopener">https://fulibus.net/2020002.html/2</a><br><a href="https://fulibus.net/2020003.html/2" target="_blank" rel="noopener">https://fulibus.net/2020003.html/2</a><br>….<br><a href="https://fulibus.net/2020015.html/2" target="_blank" rel="noopener">https://fulibus.net/2020015.html/2</a><br><a href="https://fulibus.net/2019089.html/2" target="_blank" rel="noopener">https://fulibus.net/2019089.html/2</a><br>..<br><a href="https://fulibus.net/2019178.html/2" target="_blank" rel="noopener">https://fulibus.net/2019178.html/2</a></p>
+<h3 id="3-前置工作"><a href="#3-前置工作" class="headerlink" title="3.前置工作"></a>3.前置工作</h3><p>首先，得知道图片都在哪个位置</p>
+<p>我在这里拿 <a href="https://fulibus.net/2020004.html/2" target="_blank" rel="noopener">https://fulibus.net/2020004.html/2</a> 做个例子</p>
+<p>使用Chrome Dev Tools 的 Elements 选项卡来观察一下页面结构</p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
+<p>可以看到，文章里的每个图片都在一个单独的 <img> 标签里，而这些标签属于若干个</p><p>标签，最后，这些</p><p>标签属于一个类别(class)名为article-content的<article>标签，很明显，这个标签就是文章的主体。</article></p>
+<p>接下来是 Request Headers头的模拟，对于福利吧，只需要UA就够了,</p>
+<p>我在 WhatsMyUA.info 获取到了自己的UA</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-写代码"><a href="#4-写代码" class="headerlink" title="4.写代码"></a>4.写代码</h3><p>首先，起个名字 <strong>PicDownMultiUrls.py</strong></p>
+<p>把要用到的Moudles引用一下，顺便先把headers写好。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import requests</span><br><span class="line">import os #文件操作</span><br><span class="line">headers &#x3D; &#123;&#39;User-Agent&#39;:&quot;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>整个程序的思路大概是这样</p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
+<p>为了简化程序，所有的文件读写操作都在同一个目录进行。</p>
+<p>从脑图里分析一下，整个程序应该是两个循环嵌套在一起组成的，这里我用两个for循环实现了整个流程。</p>
+<p>先把第一个循环写出来</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for line in open(&#39;url.txt&#39;):</span><br><span class="line">        url&#x3D; line   #逐行循环读取url.txt</span><br><span class="line">        print(url)     #在Console返回当前正在解析下载的url</span><br><span class="line">        request &#x3D; requests.get(url, headers&#x3D;headers)  #通过request.get获得页面</span><br><span class="line">        source &#x3D; request.text  #获得页面的文本形式源码</span><br><span class="line">        print(request)   #返回HTTP状态码</span><br><span class="line">        page_soup &#x3D; BeautifulSoup(source, &#39;html.parser&#39;)</span><br><span class="line">        #使用BeautifulSoup并调用内置html.parser解析器对html页面源码进行解析</span><br><span class="line">        imgs &#x3D; page_soup.find(&#39;article&#39;, &#123;&#39;class&#39;: &#39;article-content&#39;&#125;).find_all(&#39;img&#39;)</span><br><span class="line">        # 寻找类别名为article-content的article标签，并寻找里面所有的img标签，放在imgs列表里</span><br></pre></td></tr></table></figure>
+
+<p>扔到Jupyer Notebook跑一下看看</p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
+<p>这里我顺便把 imgs 打印了一下，可以看到对于每次循环都会有3次输出</p>
+<p>1.当前循环中的URL</p>
+<p>2.爬虫访问URL返回的HTTP状态码</p>
+<p>3.使用BeautifulSoup解析到的所有<img>标签的集合</p>
+<p>这样子，我就可以拿到所有的包含图片链接的<img>标签了。</p>
+<p>再写下一个循环</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for each in imgs:    #循环依次选定imgs列表中的每一个img标签</span><br><span class="line">    imgurl &#x3D; each[&#39;src&#39;]  #循环提取img标签中的src值并赋给imgurl</span><br><span class="line">    imgsource &#x3D; requests.get(imgurl, headers&#x3D;headers).content  #通过requests.get的方法获得图片的二进制内容</span><br><span class="line">    filename &#x3D; os.path.basename(imgurl)  #定义一个变量，储存文件的原名</span><br><span class="line">    f &#x3D; open(filename, &#39;wb&#39;)  #新建一个名字为filename的文件，通过二进制方式写入</span><br><span class="line">    f.write(imgsource)  #将imgsource写入文件中</span><br><span class="line">    f.close() #关闭文件，解除占用</span><br></pre></td></tr></table></figure>
+
+<p>把程序块拼起来，跑一下试试</p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/4.png" alt="4"></p>
+<p>由于福利吧直接把图扔到微博图床再贴到文章里，所以文件名都比较不规则。</p>
+<p>如果你想的话，可以采用 数字+扩展名 的方式进行保存。</p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/5.png" alt="5"></p>
+]]></content>
+      <categories>
+        <category>瞎折腾</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BS4实现简易起点小说爬虫</title>
+    <url>/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前两天写了一个针对福利吧的爬虫：</p>
+<blockquote>
+<p><a href="https://bakaft.me/?p=164" target="_blank" rel="noopener">https://bakaft.me/?p=164</a></p>
+<p>使用BeautifulSoup和Requests实现一个简单的图片爬虫</p>
+</blockquote>
+<p>总体来说比较简单，毕竟WordPress本身的文章页面结构比较规则，而且爬取的页面只有图片，筛选较为容易，找到图片后也不需要什么处理，下载就完事了。</p>
+<p>这次搞个小说爬虫，可以做个练手熟悉一下这些内容</p>
+<ul>
+<li>Json的获取和运用</li>
+<li>多级嵌套循环</li>
+<li>全局变量和局部变量</li>
+<li>if else结构</li>
+<li>几种常见编码</li>
+</ul>
+<p>我选择的是起点小说网，差不多是国内的老大了吧。我小学读的那本《神鬼剑士》就是起点连载的，怀念呀，可惜不知道为什么下架了。</p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>先简单了解一下起点小说网</p>
+<h3 id="1-作品结构：书，卷，章"><a href="#1-作品结构：书，卷，章" class="headerlink" title="1.作品结构：书，卷，章"></a>1.作品结构：书，卷，章</h3><h3 id="2-小说分类"><a href="#2-小说分类" class="headerlink" title="2.小说分类"></a>2.小说分类</h3><ul>
+<li>VIP小说：一般都有免费章节，以及收费章节</li>
+<li>限免小说：对收费章节临时解锁内容的VIP小说</li>
+<li>免费小说：全免~~</li>
+<li>此外，强调一点，免费章节不需要登陆就可以读，收费章节必须登录并付费才能完整阅读</li>
+</ul>
+<h3 id="3-不同设备的URL适配"><a href="#3-不同设备的URL适配" class="headerlink" title="3.不同设备的URL适配"></a>3.不同设备的URL适配</h3><h4 id="3-1-PC端"><a href="#3-1-PC端" class="headerlink" title="3.1 PC端"></a>3.1 PC端</h4><p>免费章节的URL如下:</p>
+<blockquote>
+<p>read.qidian.com/chapter/<strong>kpwCq4fKJk01/***</strong>9UndUwXIwfQex0RJOkJclQ2***</p>
+<p>chapter后，第一部分为作品唯一识别码，第二部分为章节唯一识别码<br>Json里会整体返回加粗的内容</p>
+</blockquote>
+<p>而收费章节则有些不同：</p>
+<blockquote>
+<p>vipreader.qidian.com/chapter/114559/10242607</p>
+<p>chapter后，第一部分为作品id，第二部分为章节id<br>Json里会分别返回两个内容</p>
+</blockquote>
+<h4 id="3-2-Mobile端"><a href="#3-2-Mobile端" class="headerlink" title="3.2 Mobile端"></a>3.2 Mobile端</h4><p>有一句话。。爬东西的时候，APP＞Mobile＞PC。是因为，从左到右，一般数据格式会越简单。在起点小说网确实是这样。换成手机UA来看一下。</p>
+<p>免费的章节URL：</p>
+<blockquote>
+<p>m.qidian.com/book/114559/20203867</p>
+<p>chapter后，第一部分为作品id，第二部分为章节id<br>Json里会分别返回两个内容</p>
+</blockquote>
+<p>收费的章节URL：</p>
+<blockquote>
+<p>m.qidian.com/book/114559/10265537</p>
+<p>和免费的一样！</p>
+</blockquote>
+<p>那么就会有这样一个问题，爬取限免文章的时候，不判断文章是否免费的情况下(Json里提供的数据确实不足以判断)，用PC的URL规则去Get的时候，我设定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ChapterPrefix &#x3D; &#39;https:&#x2F;&#x2F;read.qidian.com&#x2F;chapter&#x2F;&#39;</span><br><span class="line">Chapter_Url &#x3D; ChapterPrefix+[JSON返回数据]</span><br></pre></td></tr></table></figure>
+
+<p>那么我只能爬免费章节，一爬到限时解锁的章节，会因为URL格式不符合拉跨。</p>
+<p>但是，如果采用Mobile的URL规则去Get，免费和收费章节都一样，我设定</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ChapterPrefix_Mobile &#x3D; &#39;https:&#x2F;&#x2F;m.qidian.com&#x2F;book&#x2F;&#39;</span><br><span class="line">Chapter_Url_Mobile &#x3D; ChapterPrefix_Mobile+str(Book_ID)+&#39;&#x2F;&#39;+str(Chapter_ID)</span><br></pre></td></tr></table></figure>
+
+<p>这样子，就算是爬取限免作品，也可以从头爬到底了。</p>
+<p>总结一下，PC的URL规则只适合爬取免费作品，而Mobile的URL规则可以爬免费和限免作品。</p>
+<p>本文章只考虑使用Mobile站URL规则解析的方法，PC的解析方法会以另一个函数的形式附加在源码中。</p>
+<h3 id="4-Json结构"><a href="#4-Json结构" class="headerlink" title="4.Json结构"></a>4.Json结构</h3><p>很多信息都要从Json里直接获得，通过百度，我直接找到了起点的作品目录Json接口： <strong>book.qidian.com/ajax/book/category?bookId=[这里是作品ID]</strong></p>
+<p>要访问接口，需要至少在Request Headers里添加UA和Rerferer两项</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import json #实现Json转字典</span><br><span class="line">import requests</span><br><span class="line">Book_ID &#x3D; 1016027977</span><br><span class="line">Book_Url &#x3D; &#39;https:&#x2F;&#x2F;book.qidian.com&#x2F;info&#x2F;&#39;+str(Book_ID)+&#39;&#39;</span><br><span class="line">headers &#x3D; &#123;&#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36S&#39;, &#39;Referer&#39;:Book_Url&#125;</span><br><span class="line">Json_Url &#x3D; &#39;https:&#x2F;&#x2F;book.qidian.com&#x2F;ajax&#x2F;book&#x2F;category?bookId&#x3D;&#39;+str(Book_ID)+&#39;&#39;</span><br><span class="line">Json_Source &#x3D; requests.get(Json_Url, headers&#x3D;headers).text.encode(encoding&#x3D; &#39;ISO-8859-1&#39;)  #因为Json里含有中文的卷名和章节名，这里附加encoding参数</span><br><span class="line">Dict &#x3D; json.loads(Json_Source)  #Json转字典</span><br><span class="line">print(Dict)</span><br></pre></td></tr></table></figure>
+
+<p>这里我把得到的Json转化为字典打印出来.得到的内容里的中文不需要再转义，把字典处理一下扔到Json格式化工具看一下结构<img src="/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
+<p>简单做一下已知的注释，其他的感兴趣可自己摸索</p>
+<h2 id="开搞"><a href="#开搞" class="headerlink" title="开搞"></a>开搞</h2><p>先导入一下模块，定义一个计数变量，再把要爬的作品ID写成列表</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">i=<span class="number">1</span></span><br><span class="line">Book_IDs = [<span class="number">1016027977</span>,<span class="number">1012807503</span>,<span class="number">1015216119</span>,<span class="number">1015985387</span>,<span class="number">1016285482</span>,<span class="number">1016824748</span>,<span class="number">3536174</span>,<span class="number">1015181946</span>]</span><br></pre></td></tr></table></figure>
+
+<p>PC和Mobile的headers</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36S'</span>,</span><br><span class="line">    <span class="string">'Referer'</span>: <span class="string">'https://www.qidian.com'</span>&#125;</span><br><span class="line">headers_mobile = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Mobile Safari/537.36'</span>,</span><br><span class="line">    <span class="string">'Referer'</span>: <span class="string">'https://www.qidian.com'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于列表中的每一个作品，拿到Json并转化为字典</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> Book_ID <span class="keyword">in</span> Book_IDs:</span><br><span class="line">    Book_Url = <span class="string">'https://book.qidian.com/info/'</span>+str(Book_ID)+<span class="string">''</span></span><br><span class="line">    Book_Url_Mobile = <span class="string">'https://m.qidian.com/book/'</span>+str(Book_ID)+<span class="string">''</span></span><br><span class="line">    Book_Name = BeautifulSoup(requests.get(Book_Url_Mobile, headers=headers).text, <span class="string">'html.parser'</span>).find(attrs=&#123;<span class="string">"property"</span>: <span class="string">"og:title"</span>&#125;)[<span class="string">'content'</span>]</span><br><span class="line">    <span class="comment">#指定作品ID并设定一些变量</span></span><br><span class="line"></span><br><span class="line">    Json_Url = <span class="string">'https://book.qidian.com/ajax/book/category?bookId='</span>+str(Book_ID)+<span class="string">''</span></span><br><span class="line">    Json_Source = requests.get(Json_Url, headers=headers).text.encode(encoding= <span class="string">'ISO-8859-1'</span>)</span><br><span class="line">    Dict = json.loads(Json_Source)</span><br><span class="line">    print(Dict)  <span class="comment">#字典Get</span></span><br><span class="line">    Volumes = Dict[<span class="string">'data'</span>][<span class="string">'vs'</span>]  <span class="comment">#定义Volumes为列表vs</span></span><br></pre></td></tr></table></figure>
+
+<p>嵌套一个循环，对字典信息进行处理</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> each1 <span class="keyword">in</span> Chapter_Info:   <span class="comment">#定义章节相关变量</span></span><br><span class="line">    Chapter_ID = each1[<span class="string">'id'</span>]</span><br><span class="line">    Chapter_Number = <span class="string">'['</span>+str(i)+<span class="string">']'</span>  </span><br><span class="line">    <span class="comment">#自己在每个文件名前加的爬取顺序数字，防止部分奇怪标题影响排序。</span></span><br><span class="line">    ChapterPrefix = <span class="string">'https://read.qidian.com/chapter/'</span></span><br><span class="line">    ChapterPrefix_Mobile = <span class="string">'https://m.qidian.com/book/'</span></span><br><span class="line">    Chapter_Url = ChapterPrefix+each1[<span class="string">'cU'</span>]</span><br><span class="line">    Chapter_Url_Mobile = ChapterPrefix_Mobile+str(Book_ID)+<span class="string">'/'</span>+str(Chapter_ID)</span><br><span class="line">    Chapter_Name = Chapter_Number+each1[<span class="string">'cN'</span>]</span><br><span class="line">    Chapter_Name_Replaced = Chapter_Name.replace(<span class="string">'/'</span>, <span class="string">'／'</span>).replace(<span class="string">'*'</span>, <span class="string">'[星号]'</span>).replace(<span class="string">'?'</span>, <span class="string">'[问号]'</span>).replace(<span class="string">':'</span>, <span class="string">'[冒号]'</span>).replace(<span class="string">'"'</span>, <span class="string">'双引号'</span>).replace(<span class="string">'&lt;'</span>, <span class="string">'[左尖括号]'</span>).replace(<span class="string">'&gt;'</span>, <span class="string">'[右尖括号]'</span>).replace(<span class="string">'|'</span>, <span class="string">'[竖杠]'</span>)</span><br><span class="line">    <span class="comment">#避免某些作者的奇怪章节名。。规则遵循Windows的命名方法。</span></span><br><span class="line">    Chapter_TextCount = each1[<span class="string">'cnt'</span>] <span class="comment">#章节字数，暂时没用到</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来用一个函数来写下载部分，套在第二个循环里</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GetBook_Mobile</span><span class="params">()</span>:</span> </span><br><span class="line">    <span class="keyword">global</span> i  <span class="comment">#在函数体里声明一下变量i是全局变量</span></span><br><span class="line">    Page_request = requests.get(Chapter_Url_Mobile, headers=headers_mobile)</span><br><span class="line">    Page_Source = Page_request.text</span><br><span class="line">    Page_Soup = BeautifulSoup(Page_Source, <span class="string">'html.parser'</span>)</span><br><span class="line">    Paragraphs = Page_Soup.find(<span class="string">'section'</span>, &#123;<span class="string">'class'</span>: <span class="string">'read-section jsChapterWrapper'</span>&#125;).find(<span class="string">'p'</span>)<span class="comment">#寻找第一个p标签</span></span><br><span class="line">    <span class="comment">#这里比较难理解，起点的文段部分用Bs4解析完是一个&lt;p&gt;标签套娃的结构，就像俄罗斯套娃,这里只取最外层的标签即可</span></span><br><span class="line">    FormattedChapter = Paragraphs.text.replace(<span class="string">'　　'</span>, <span class="string">'\n\n'</span>) </span><br><span class="line">    <span class="comment">#文章格式化处理 好康一些</span></span><br><span class="line">    print(<span class="string">'---作品保存：'</span>+Book_Name) </span><br><span class="line">    <span class="keyword">if</span> os.path.isdir(Book_Name):</span><br><span class="line">        <span class="keyword">pass</span> <span class="comment">##防止重复写目录</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        os.mkdir(Book_Name)</span><br><span class="line">        print(<span class="string">'作品目录创建成功'</span>) <span class="comment">#保存新作品时的提示</span></span><br><span class="line">    File_RelativePath = Book_Name+<span class="string">'/'</span>+Chapter_Name_Replaced+<span class="string">'.txt'</span>  </span><br><span class="line">    <span class="comment">#定义每一个txt文件的相对路径</span></span><br><span class="line">    print(<span class="string">'章节保存：'</span>+Chapter_Name_Replaced)</span><br><span class="line">    i=i+<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(File_RelativePath):</span><br><span class="line">        print(<span class="string">'章节已存在,跳过'</span>) </span><br><span class="line">        <span class="keyword">pass</span> <span class="comment">#防止重复写文件</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        f = open(Book_Name+<span class="string">'/'</span>+Chapter_Name_Replaced+<span class="string">'.txt'</span>, <span class="string">'w'</span>, encoding= <span class="string">'utf-8'</span>)</span><br><span class="line">        <span class="comment">#创建txt文件</span></span><br><span class="line">        <span class="keyword">for</span> eachline <span class="keyword">in</span> FormattedChapter:</span><br><span class="line">            f.write(eachline)    <span class="comment">#逐行写入</span></span><br><span class="line">        f.close()</span><br><span class="line">        print(<span class="string">'章节保存成功'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>调用一下就开搞了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">GetBook_Mobile()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
+]]></content>
+      <categories>
+        <category>瞎折腾</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>爬虫</tag>
       </tags>
   </entry>
 </search>
