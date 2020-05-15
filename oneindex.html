@@ -1,69 +1,10 @@
 <!DOCTYPE html>
 
-
-<html lang="zh-Hans">
-
-
-<head>
-  <meta charset="utf-8" />
-    
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>
-     BakaFT&#39;s blog
-  </title>
-  <meta name="generator" content="hexo-theme-ayer">
-  
-  <link rel="shortcut icon" href="/favicon.ico" />
-  
-  
-<link rel="stylesheet" href="/dist/main.css">
-
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
-
-  
-<link rel="stylesheet" href="/css/custom.css">
-
-  
-  
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-  
-  
-
-  
-
-</head>
-
-</html>
-
-<body>
-  <div id="app">
-    <main class="content on">
-      <section class="outer">
-  <article id="page-" class="article article-type-page" itemscope
-  itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-
-    
-
-    
-
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-
-      
-      <!DOCTYPE html>
-
 <head>
     <script>
         /**
-        * SCF_GATEWAYï¿½ï¿½SCF ï¿½Æºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ö·
-        * SITE_NAMEï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        * SCF_GATEWAY£ºSCF ÔÆº¯ÊıÍø¹ØµØÖ·
+        * SITE_NAME£ºÕ¾µãÃû³Æ
         */
         window.GLOBAL_CONFIG = {
             SCF_GATEWAY: "https://bakaft-onedrive.1355564740.workers.dev/",
@@ -83,11 +24,11 @@
     <script src="//s0.pstatp.com/cdn/expire-1-M/ionicons/4.5.6/ionicons.js"></script>
     <script src="//s0.pstatp.com/cdn/expire-1-M/marked/0.6.2/marked.min.js"></script>
     <script src="//s0.pstatp.com/cdn/expire-1-M/highlight.js/9.15.6/highlight.min.js"></script>
-    <link href="//s0.pstatp.com/cdn/expire-1-M/highlight.js/9.15.6/styles/github.min.css" rel="stylesheet">
-    <link href="//s0.pstatp.com/cdn/expire-1-M/github-markdown-css/3.0.1/github-markdown.min.css" rel="stylesheet">
+    <link href="//s0.pstatp.com/cdn/expire-1-M/highlight.js/9.15.6/styles/github.min.css" rel="stylesheet" />
+    <link href="//s0.pstatp.com/cdn/expire-1-M/github-markdown-css/3.0.1/github-markdown.min.css" rel="stylesheet" />
     <script src="//s0.pstatp.com/cdn/expire-1-M/jquery/3.4.0/jquery.min.js"></script>
     <script src="//s0.pstatp.com/cdn/expire-1-M/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-    <link href="//s0.pstatp.com/cdn/expire-1-M/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet">
+    <link href="//s0.pstatp.com/cdn/expire-1-M/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet" />
     <style>
         .password-wrapper {
             display: flex;
@@ -788,14 +729,14 @@
             const buttonParent = button.parentElement;
             const buttonClone = button.cloneNode(true);
             buttonParent.replaceChild(buttonClone, button);
-            input.placeholder = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+            input.placeholder = 'ÇëÊäÈëÃÜÂë';
             buttonClone.addEventListener('click', event => {
                 const passwd = input.value;
                 if (!input.value) {
                     return;
                 }
                 input.value = '';
-                input.placeholder = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤..';
+                input.placeholder = 'ÕıÔÚÑéÖ¤..';
                 sendRequest(window.api.method,
                     window.api.url,
                     window.api.formatPayload(files.parent, passwd),
@@ -803,7 +744,7 @@
                     data => {
                         const newFiles = JSON.parse(data);
                         if (newFiles.encrypted) {
-                            input.placeholder = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
+                            input.placeholder = 'ÃÜÂë´íÎó';
                         } else {
                             window.fileCache.set(newFiles.parent, newFiles);
                             fetchFileList(newFiles.parent);
@@ -998,7 +939,7 @@
                             div.style.background = 'rgba(218, 215, 215, 0.21)';
                             div.style.webkitTapHighlightColor = 'rgba(0, 0, 0, 0)';
                             div.style.cursor = 'pointer';
-                            div.innerHTML = 'ï¿½Â´ï¿½ï¿½Ú´ï¿½';
+                            div.innerHTML = 'ĞÂ´°¿Ú´ò¿ª';
                             div.addEventListener('click', () => window.open(officeOnline));
                             content.innerHTML = '';
                             content.appendChild(div);
@@ -1013,7 +954,7 @@
                             break;
                         default:
                             content.style['text-align'] = 'center';
-                            content.innerHTML = 'ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ö§ï¿½ï¿½Ô¤ï¿½ï¿½';
+                            content.innerHTML = '¸ÃÎÄ¼ş²»Ö§³ÖÔ¤ÀÀ';
                             break;
 
                     }
@@ -1025,8 +966,8 @@
                         event => {
                             previewHandler.copyTextContent(null, window.api.url + '?file=' + path);
                             const btn = document.querySelector('.btn.quote');
-                            btn.innerHTML = 'ï¿½Ñ¸ï¿½ï¿½ï¿½';
-                            setTimeout(() => btn.innerHTML = 'ï¿½ï¿½ï¿½ï¿½', 250);
+                            btn.innerHTML = 'ÒÑ¸´ÖÆ';
+                            setTimeout(() => btn.innerHTML = 'ÒıÓÃ', 250);
                         }
                     );
                     document.querySelector('.btn.share').addEventListener('click',
@@ -1044,8 +985,8 @@
                                 window.location.pathname +
                                 '?path=' + sharePath());
                             const btn = document.querySelector('.btn.share');
-                            btn.innerHTML = 'ï¿½Ñ¸ï¿½ï¿½ï¿½';
-                            setTimeout(() => btn.innerHTML = 'ï¿½ï¿½ï¿½ï¿½', 250);
+                            btn.innerHTML = 'ÒÑ¸´ÖÆ';
+                            setTimeout(() => btn.innerHTML = '·ÖÏí', 250);
                         }
                     );
                     switchRightDisplay('preview');
@@ -1314,7 +1255,7 @@
             }
         });
     </script>
-<meta name="generator" content="Hexo 4.2.0"></head>
+</head>
 
 <body hidden="hidden">
     <template id="tree-node-wrapper-template">
@@ -1376,386 +1317,21 @@
                 <div class="preview">
                     <div class="info">
                         <div class="file-name"></div>
-                        <div class="btn download">ï¿½ï¿½ï¿½ï¿½</div>
-                        <div class="btn quote">ï¿½ï¿½ï¿½ï¿½</div>
-                        <div class="btn share">ï¿½ï¿½ï¿½ï¿½</div>
+                        <div class="btn download">ÏÂÔØ</div>
+                        <div class="btn quote">ÒıÓÃ</div>
+                        <div class="btn share">·ÖÏí</div>
                     </div>
                     <div class="content"></div>
                 </div>
                 <div class="password-wrapper">
                     <div class="password">
                         <input type="password">
-                        <button>ï¿½á½»</button>
+                        <button>Ìá½»</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-
-
-      
-      <!-- reward -->
-      
-    </div>
-    
-    
-      <!-- copyright -->
-      
-    <footer class="article-footer">
-      
-      
-
-    </footer>
-
-  </div>
-
-  
-  
-
-  
-
-  
-
-  
-  
-  
-
-</article>
-</section>
-      <footer class="footer">
-  <div class="outer">
-    <ul>
-      <li>
-        Copyrights &copy;
-        2020
-        <i class="ri-heart-fill heart_icon"></i> BakaFT
-      </li>
-    </ul>
-    <ul>
-      <li>
-        
-        
-        
-        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
-        <span class="division">|</span>
-        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
-        
-      </li>
-    </ul>
-    <ul>
-      <li>
-        
-      </li>
-    </ul>
-    <ul>
-      
-    </ul>
-    <ul>
-      <li>
-        <!-- cnzzç»Ÿè®¡ -->
-        
-      </li>
-    </ul>
-  </div>
-</footer>
-      <div class="float_btns">
-        <div class="totop" id="totop">
-  <i class="ri-arrow-up-line"></i>
-</div>
-
-<div class="todark" id="todark">
-  <i class="ri-moon-line"></i>
-</div>
-
-      </div>
-    </main>
-    <aside class="sidebar on">
-      <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-  <div class="logo">
-    <a href="/"><img src="/images/ayer-side.svg" alt="BakaFT&#39;s blog"></a>
-  </div>
-  
-  <ul class="nav nav-main">
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/">Index</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/archives">Archives</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/oneindex">OneIndex</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/about">About me</a>
-    </li>
-    
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      
-      <a class="nav-item-link nav-item-search"  title="Search">
-        <i class="ri-search-line"></i>
-      </a>
-      
-      
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
-</div>
-</div>
-    </aside>
-    <script>
-      if (window.matchMedia("(max-width: 768px)").matches) {
-        document.querySelector('.content').classList.remove('on');
-        document.querySelector('.sidebar').classList.remove('on');
-      }
-    </script>
-    <div id="mask"></div>
-
-<!-- #reward -->
-<div id="reward">
-  <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>è¯·æˆ‘å–æ¯å’–å•¡å§~</p>
-  <div class="reward-box">
-    
-    <div class="reward-item">
-      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
-      <span class="reward-type">æ”¯ä»˜å®</span>
-    </div>
-    
-    
-    <div class="reward-item">
-      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
-      <span class="reward-type">å¾®ä¿¡</span>
-    </div>
-    
-  </div>
-</div>
-    
-<script src="/js/jquery-2.0.3.min.js"></script>
-
-
-<script src="/js/lazyload.min.js"></script>
-
-<!-- Subtitle -->
-
-<script>
-  try {
-    var typed = new Typed("#subtitle", {
-      strings: ['é¢æœå¤§æµ·ï¼Œæ˜¥æš–èŠ±å¼€', 'æ„¿ä½ ä¸€ç”ŸåŠªåŠ›ï¼Œä¸€ç”Ÿè¢«çˆ±', 'æƒ³è¦çš„éƒ½æ‹¥æœ‰ï¼Œå¾—ä¸åˆ°çš„éƒ½é‡Šæ€€'],
-      startDelay: 0,
-      typeSpeed: 200,
-      loop: true,
-      backSpeed: 100,
-      showCursor: true
-    });
-  } catch (err) {
-    console.log(err)
-  }
-</script>
-
-<!-- Tocbot -->
-
-<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
-<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
-
-<script src="/dist/main.js"></script>
-
-<!-- ImageViewer -->
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    <!-- Background of PhotoSwipe. 
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-
-        <!-- Container that holds slides. 
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
-<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
-
-<script>
-    function viewer_init() {
-        let pswpElement = document.querySelectorAll('.pswp')[0];
-        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
-
-        $imgArr.forEach(($em, i) => {
-            $em.onclick = () => {
-                // sliderå±•å¼€çŠ¶æ€
-                // todo: è¿™æ ·ä¸å¥½ï¼Œåé¢æ”¹æˆçŠ¶æ€
-                if (document.querySelector('.left-col.show')) return
-                let items = []
-                $imgArr.forEach(($em2, i2) => {
-                    let img = $em2.getAttribute('data-idx', i2)
-                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
-                    let title = $em2.getAttribute('alt')
-                    // è·å¾—åŸå›¾å°ºå¯¸
-                    const image = new Image()
-                    image.src = src
-                    items.push({
-                        src: src,
-                        w: image.width || $em2.width,
-                        h: image.height || $em2.height,
-                        title: title
-                    })
-                })
-                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
-                    index: parseInt(i)
-                });
-                gallery.init()
-            }
-        })
-    }
-    viewer_init()
-</script>
-
-<!-- MathJax -->
-
-<!-- Katex -->
-
-<!-- busuanzi  -->
-
-<!-- ClickLove -->
-
-<!-- CodeCopy -->
-
-
-<link rel="stylesheet" href="/css/clipboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
-<script>
-  function wait(callback, seconds) {
-    var timelag = null;
-    timelag = window.setTimeout(callback, seconds);
-  }
-  !function (e, t, a) {
-    var initCopyCode = function(){
-      var copyHtml = '';
-      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
-      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
-      copyHtml += '</button>';
-      $(".highlight .code pre").before(copyHtml);
-      $(".article pre code").before(copyHtml);
-      var clipboard = new ClipboardJS('.btn-copy', {
-        target: function(trigger) {
-          return trigger.nextElementSibling;
-        }
-      });
-      clipboard.on('success', function(e) {
-        let $btn = $(e.trigger);
-        $btn.addClass('copied');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-checkbox-circle-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPIED';
-        
-        wait(function () { // ç­‰å¾…ä¸¤ç§’é’Ÿåæ¢å¤
-          $icon.removeClass('ri-checkbox-circle-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
-      clipboard.on('error', function(e) {
-        e.clearSelection();
-        let $btn = $(e.trigger);
-        $btn.addClass('copy-failed');
-        let $icon = $($btn.find('i'));
-        $icon.removeClass('ri-file-copy-2-line');
-        $icon.addClass('ri-time-line');
-        let $span = $($btn.find('span'));
-        $span[0].innerText = 'COPY FAILED';
-        
-        wait(function () { // ç­‰å¾…ä¸¤ç§’é’Ÿåæ¢å¤
-          $icon.removeClass('ri-time-line');
-          $icon.addClass('ri-file-copy-2-line');
-          $span[0].innerText = 'COPY';
-        }, 2000);
-      });
-    }
-    initCopyCode();
-  }(window, document);
-</script>
-
-
-
-    
-  </div>
 </body>
 
 </html>
