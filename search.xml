@@ -24,7 +24,7 @@
 </ul>
 <h3 id="3-不同设备的URL适配"><a href="#3-不同设备的URL适配" class="headerlink" title="3.不同设备的URL适配"></a>3.不同设备的URL适配</h3><h4 id="3-1-PC端"><a href="#3-1-PC端" class="headerlink" title="3.1 PC端"></a>3.1 PC端</h4><p>免费章节的URL如下:</p>
 <blockquote>
-<p>read.qidian.com/chapter/<strong>kpwCq4fKJk01/***</strong>9UndUwXIwfQex0RJOkJclQ2***</p>
+<p>read.qidian.com/chapter/<strong>kpwCq4fKJk01</strong>/<strong>9UndUwXIwfQex0RJOkJclQ2</strong></p>
 <p>chapter后，第一部分为作品唯一识别码，第二部分为章节唯一识别码<br>Json里会整体返回加粗的内容</p>
 </blockquote>
 <p>而收费章节则有些不同：</p>
@@ -566,6 +566,46 @@
       <tags>
         <tag>Python</tag>
         <tag>学堂在线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python中的切片操作</title>
+    <url>/2020/05/19/Python%E4%B8%AD%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<p>Python中字符串可以进行切片操作，以下的例子详尽地展示了各种方式下的运用。</p>
+<p>需要注意的是，Python的最后一项索引为 <code>-1</code> </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str = <span class="string">'0123456789'</span>  <span class="comment">#str[start:stop:step]   遵循【左闭右开】规则              输出</span></span><br><span class="line"></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment">#截取第一位到第三位的字符                 　　　　　　　　　　#012</span></span><br><span class="line">print(str[<span class="number">1</span>:<span class="number">5</span>])     <span class="comment">#截取第二位到第六位之前的字符              　　　　　　　　　　#1234</span></span><br><span class="line">print(str[:])       <span class="comment">#截取字符串的全部字符                     　　　　　　　　   #0123456789</span></span><br><span class="line">print(str[<span class="number">6</span>:])      <span class="comment">#截取第七个字符到结尾                     　　　　　　　   　#6789</span></span><br><span class="line">print(str[:<span class="number">-3</span>])     <span class="comment">#截取从头开始到倒数第三个字符之前           　　　　　　　   　#0123456</span></span><br><span class="line">print(str[<span class="number">2</span>])       <span class="comment">#截取第三个字符                           　　　　　　      #2</span></span><br><span class="line">print(str[<span class="number">-1</span>])      <span class="comment">#截取倒数第一个字符                    　　　　　　　　      #9</span></span><br><span class="line">print(str[::<span class="number">-1</span>])    <span class="comment">#创造一个与原字符串顺序相反的字符串        　　　　　　　  　  #9876543210</span></span><br><span class="line">print(str[<span class="number">-3</span>:<span class="number">-1</span>])   <span class="comment">#截取倒数第三位与倒数第一位之前的字符       　　　　　　　 　  #78</span></span><br><span class="line">print(str[<span class="number">-3</span>:])     <span class="comment">#截取倒数第三位到结尾                    　　　　　　　   　 #789</span></span><br><span class="line">print(str[:<span class="number">-5</span>:<span class="number">-3</span>])  <span class="comment">#逆序截取，步长为3                     　　　　　　　　　　  #96</span></span><br><span class="line">print(str[<span class="number">9</span>:<span class="number">0</span>:<span class="number">-1</span>])  <span class="comment">#逆序截取，起始值为列表的第10为数，到列表第1位数之前的数结束，　　#987654321</span></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">12</span>])    <span class="comment">#截取全部元素</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>转载于 <a href="https://www.cnblogs.com/gengyufei/p/11316839.html" target="_blank" rel="noopener">https://www.cnblogs.com/gengyufei/p/11316839.html</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>巧妙解决回文数判断</title>
+    <url>/2020/05/19/%E5%B7%A7%E5%A6%99%E8%A7%A3%E5%86%B3%E5%9B%9E%E6%96%87%E6%95%B0%E5%88%A4%E6%96%AD/</url>
+    <content><![CDATA[<p>这是廖雪峰Python教程的一道关于filter()的练习题。</p>
+<blockquote>
+<p>回文数是指从左向右读和从右向左读都是一样的数，例如<code>12321</code>，<code>909</code>。</p>
+<p>利用filter()函数筛选出回文数，请你完成对筛选函数的定义。</p>
+</blockquote>
+<p>在评论区看到一个很妙的解法 来自@rb-h浪子-含笑</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_palindrome</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span>  str(n)==str(n)[::<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这个方法很巧妙的把数字转成了字符串，再利用字符串的切片操作实现了字符串的倒写，如果正着写和倒着写都一样，那一定是回文数了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_palindrome</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span>  str(n)==str(n)[::<span class="number">-1</span>]</span><br><span class="line"><span class="comment"># 测试:</span></span><br><span class="line">output = filter(is_palindrome, range(<span class="number">1</span>, <span class="number">1000</span>))</span><br><span class="line">print(<span class="string">'1~1000:'</span>, list(output))</span><br><span class="line"><span class="keyword">if</span> list(filter(is_palindrome, range(<span class="number">1</span>, <span class="number">200</span>))) == [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>, <span class="number">44</span>, <span class="number">55</span>, <span class="number">66</span>, <span class="number">77</span>, <span class="number">88</span>, <span class="number">99</span>, <span class="number">101</span>, <span class="number">111</span>, <span class="number">121</span>, <span class="number">131</span>, <span class="number">141</span>, <span class="number">151</span>, <span class="number">161</span>, <span class="number">171</span>, <span class="number">181</span>, <span class="number">191</span>]:</span><br><span class="line">    print(<span class="string">'测试成功!'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'测试失败!'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">#output:   </span></span><br><span class="line"><span class="comment"># 1~1000: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33, 44, 55, 66, 77, 88, 99, 101, 111, 121, 131, 141, 151, 161, 171, 181, 191, 202, 212, 222, 232, 242, 252, 262, 272, 282, 292, 303, 313, 323, 333, 343, 353, 363, 373, 383, 393, 404, 414, 424, 434, 444, 454, 464, 474, 484, 494, 505, 515, 525, 535, 545, 555, 565, 575, 585, 595, 606, 616, 626, 636, 646, 656, 666, 676, 686, 696, 707, 717, 727, 737, 747, 757, 767, 777, 787, 797, 808, 818, 828, 838, 848, 858, 868, 878, 888, 898, 909, 919, 929, 939, 949, 959, 969, 979, 989, 999]</span></span><br><span class="line"><span class="comment"># 测试成功!</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
       </tags>
   </entry>
 </search>
