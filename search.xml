@@ -88,6 +88,40 @@
       </tags>
   </entry>
   <entry>
+    <title>为什么1/2=0?</title>
+    <url>/2020/02/26/%E4%B8%BA%E4%BB%80%E4%B9%881-2-0/</url>
+    <content><![CDATA[<blockquote>
+<p>C primer plus 课后作业 3.11.8</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cup; <span class="comment">//1cup=0.5pint=8ounce=16big=48small</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"How many cups?\n"</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;cup);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d Cup is %f in pint,%d in ounce,%d in big and %d in small"</span>,cup, cup/<span class="number">2</span>, cup*<span class="number">8</span>, cup*<span class="number">16</span>, cup*<span class="number">48</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//output: 1 Cup is 0 in pint,8 in ouns,16 in big and 48 in small</span></span><br><span class="line"><span class="comment">//cup/2改成cup*0.5</span></span><br><span class="line"><span class="comment">//output: 1 Cup is 0.500000 in pint,8 in ounce,16 in big and 48 in small</span></span><br></pre></td></tr></table></figure>
+
+<p>查阅发现<br>C的除法，当两边都是int型数时，做整除运算，1/2=0<br>如果两边至少有一个为float或者double，那么将做一般的除法，1.0/2=0.5 。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">float</span> c=<span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f"</span>,cup/c); </span><br><span class="line"><span class="comment">//output : 0.500000</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python中的切片操作</title>
+    <url>/2020/05/19/Python%E4%B8%AD%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<p>Python中字符串可以进行切片操作，以下的例子详尽地展示了各种方式下的运用。</p>
+<p>需要注意的是，Python的最后一项索引为 <code>-1</code> </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str = <span class="string">'0123456789'</span>  <span class="comment">#str[start:stop:step]   遵循【左闭右开】规则              输出</span></span><br><span class="line"></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment">#截取第一位到第三位的字符                 　　　　　　　　　　#012</span></span><br><span class="line">print(str[<span class="number">1</span>:<span class="number">5</span>])     <span class="comment">#截取第二位到第六位之前的字符              　　　　　　　　　　#1234</span></span><br><span class="line">print(str[:])       <span class="comment">#截取字符串的全部字符                     　　　　　　　　   #0123456789</span></span><br><span class="line">print(str[<span class="number">6</span>:])      <span class="comment">#截取第七个字符到结尾                     　　　　　　　   　#6789</span></span><br><span class="line">print(str[:<span class="number">-3</span>])     <span class="comment">#截取从头开始到倒数第三个字符之前           　　　　　　　   　#0123456</span></span><br><span class="line">print(str[<span class="number">2</span>])       <span class="comment">#截取第三个字符                           　　　　　　      #2</span></span><br><span class="line">print(str[<span class="number">-1</span>])      <span class="comment">#截取倒数第一个字符                    　　　　　　　　      #9</span></span><br><span class="line">print(str[::<span class="number">-1</span>])    <span class="comment">#创造一个与原字符串顺序相反的字符串        　　　　　　　  　  #9876543210</span></span><br><span class="line">print(str[<span class="number">-3</span>:<span class="number">-1</span>])   <span class="comment">#截取倒数第三位与倒数第一位之前的字符       　　　　　　　 　  #78</span></span><br><span class="line">print(str[<span class="number">-3</span>:])     <span class="comment">#截取倒数第三位到结尾                    　　　　　　　   　 #789</span></span><br><span class="line">print(str[:<span class="number">-5</span>:<span class="number">-3</span>])  <span class="comment">#逆序截取，步长为3                     　　　　　　　　　　  #96</span></span><br><span class="line">print(str[<span class="number">9</span>:<span class="number">0</span>:<span class="number">-1</span>])  <span class="comment">#逆序截取，起始值为列表的第10为数，到列表第1位数之前的数结束，　　#987654321</span></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">12</span>])    <span class="comment">#截取全部元素</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>转载于 <a href="https://www.cnblogs.com/gengyufei/p/11316839.html" target="_blank" rel="noopener">https://www.cnblogs.com/gengyufei/p/11316839.html</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python实现dec转hex,bin并打印步骤</title>
     <url>/2020/02/20/Python%E5%AE%9E%E7%8E%B0dec%E8%BD%AChex-bin%E5%B9%B6%E6%89%93%E5%8D%B0%E6%AD%A5%E9%AA%A4/</url>
     <content><![CDATA[<blockquote>
@@ -102,16 +136,27 @@
       </tags>
   </entry>
   <entry>
-    <title>为什么1/2=0?</title>
-    <url>/2020/02/26/%E4%B8%BA%E4%BB%80%E4%B9%881-2-0/</url>
+    <title>为什么INT_MAX和INT_MIN绝对值不相等</title>
+    <url>/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/</url>
     <content><![CDATA[<blockquote>
-<p>C primer plus 课后作业 3.11.8</p>
+<p> -2147483648 ~ +2147483647  (4 Bytes) </p>
+<p>INT的数据范围, 模为2^32</p>
 </blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cup; <span class="comment">//1cup=0.5pint=8ounce=16big=48small</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"How many cups?\n"</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;cup);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d Cup is %f in pint,%d in ounce,%d in big and %d in small"</span>,cup, cup/<span class="number">2</span>, cup*<span class="number">8</span>, cup*<span class="number">16</span>, cup*<span class="number">48</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//output: 1 Cup is 0 in pint,8 in ouns,16 in big and 48 in small</span></span><br><span class="line"><span class="comment">//cup/2改成cup*0.5</span></span><br><span class="line"><span class="comment">//output: 1 Cup is 0.500000 in pint,8 in ounce,16 in big and 48 in small</span></span><br></pre></td></tr></table></figure>
+<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>其中最高位是符号位，0正1负。</p>
+<p>计算机中数据储存采用补码形式，这意味着+0和-0的表达方式是一样的，都是</p>
+<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>这也导致，没有任何数的补码为 1000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>本着不浪费的原则，于是规定该补码储存 <strong>-(int_max + 1)</strong></p>
+<p>于是出现了数据范围不对称的情况。</p>
+<p>另外，这样也可以解释为什么 2147483647 + 1会溢出变成-2147483648</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">2147483647</span>; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d and %d"</span>,i, i+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*   output : 2147483647 and -2147483648 */</span></span><br></pre></td></tr></table></figure>
 
-<p>查阅发现<br>C的除法，当两边都是int型数时，做整除运算，1/2=0<br>如果两边至少有一个为float或者double，那么将做一般的除法，1.0/2=0.5 。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">float</span> c=<span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f"</span>,cup/c); </span><br><span class="line"><span class="comment">//output : 0.500000</span></span><br></pre></td></tr></table></figure>
-
+<p>因为2147483647的补码是</p>
+<p>0111 1111 1111 1111 1111 1111 1111 1111</p>
+<p>+1之后正好是</p>
+<p>1000 0000 0000 0000 0000 0000 0000 0000</p>
+<p>也就是 -2147483648 的补码</p>
 ]]></content>
       <tags>
         <tag>C</tag>
@@ -182,33 +227,6 @@
       <tags>
         <tag>Python</tag>
         <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>为什么INT_MAX和INT_MIN绝对值不相等</title>
-    <url>/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/</url>
-    <content><![CDATA[<blockquote>
-<p> -2147483648 ~ +2147483647  (4 Bytes) </p>
-<p>INT的数据范围, 模为2^32</p>
-</blockquote>
-<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
-<p>其中最高位是符号位，0正1负。</p>
-<p>计算机中数据储存采用补码形式，这意味着+0和-0的表达方式是一样的，都是</p>
-<p>0000 0000 0000 0000 0000 0000 0000 0000</p>
-<p>这也导致，没有任何数的补码为 1000 0000 0000 0000 0000 0000 0000 0000</p>
-<p>本着不浪费的原则，于是规定该补码储存 <strong>-(int_max + 1)</strong></p>
-<p>于是出现了数据范围不对称的情况。</p>
-<p>另外，这样也可以解释为什么 2147483647 + 1会溢出变成-2147483648</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">2147483647</span>; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d and %d"</span>,i, i+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*   output : 2147483647 and -2147483648 */</span></span><br></pre></td></tr></table></figure>
-
-<p>因为2147483647的补码是</p>
-<p>0111 1111 1111 1111 1111 1111 1111 1111</p>
-<p>+1之后正好是</p>
-<p>1000 0000 0000 0000 0000 0000 0000 0000</p>
-<p>也就是 -2147483648 的补码</p>
-]]></content>
-      <tags>
-        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -566,24 +584,6 @@
       <tags>
         <tag>Python</tag>
         <tag>学堂在线</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python中的切片操作</title>
-    <url>/2020/05/19/Python%E4%B8%AD%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<p>Python中字符串可以进行切片操作，以下的例子详尽地展示了各种方式下的运用。</p>
-<p>需要注意的是，Python的最后一项索引为 <code>-1</code> </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str = <span class="string">'0123456789'</span>  <span class="comment">#str[start:stop:step]   遵循【左闭右开】规则              输出</span></span><br><span class="line"></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment">#截取第一位到第三位的字符                 　　　　　　　　　　#012</span></span><br><span class="line">print(str[<span class="number">1</span>:<span class="number">5</span>])     <span class="comment">#截取第二位到第六位之前的字符              　　　　　　　　　　#1234</span></span><br><span class="line">print(str[:])       <span class="comment">#截取字符串的全部字符                     　　　　　　　　   #0123456789</span></span><br><span class="line">print(str[<span class="number">6</span>:])      <span class="comment">#截取第七个字符到结尾                     　　　　　　　   　#6789</span></span><br><span class="line">print(str[:<span class="number">-3</span>])     <span class="comment">#截取从头开始到倒数第三个字符之前           　　　　　　　   　#0123456</span></span><br><span class="line">print(str[<span class="number">2</span>])       <span class="comment">#截取第三个字符                           　　　　　　      #2</span></span><br><span class="line">print(str[<span class="number">-1</span>])      <span class="comment">#截取倒数第一个字符                    　　　　　　　　      #9</span></span><br><span class="line">print(str[::<span class="number">-1</span>])    <span class="comment">#创造一个与原字符串顺序相反的字符串        　　　　　　　  　  #9876543210</span></span><br><span class="line">print(str[<span class="number">-3</span>:<span class="number">-1</span>])   <span class="comment">#截取倒数第三位与倒数第一位之前的字符       　　　　　　　 　  #78</span></span><br><span class="line">print(str[<span class="number">-3</span>:])     <span class="comment">#截取倒数第三位到结尾                    　　　　　　　   　 #789</span></span><br><span class="line">print(str[:<span class="number">-5</span>:<span class="number">-3</span>])  <span class="comment">#逆序截取，步长为3                     　　　　　　　　　　  #96</span></span><br><span class="line">print(str[<span class="number">9</span>:<span class="number">0</span>:<span class="number">-1</span>])  <span class="comment">#逆序截取，起始值为列表的第10为数，到列表第1位数之前的数结束，　　#987654321</span></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">12</span>])    <span class="comment">#截取全部元素</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>转载于 <a href="https://www.cnblogs.com/gengyufei/p/11316839.html" target="_blank" rel="noopener">https://www.cnblogs.com/gengyufei/p/11316839.html</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
