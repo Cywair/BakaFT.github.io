@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Python实现dec转hex,bin并打印步骤</title>
+    <url>/2020/02/20/Python%E5%AE%9E%E7%8E%B0dec%E8%BD%AChex-bin%E5%B9%B6%E6%89%93%E5%8D%B0%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<blockquote>
+<p>计算机基础课程的作业：</p>
+<p>将十进制数35.75分别转换成二进制数与十六进制数 ，并附计算过程</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">decs = [<span class="number">35.75</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Bin</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'待转换数字为:'</span> + str(dec))</span><br><span class="line">        print(<span class="string">'---转换为二进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span>+str(big))</span><br><span class="line">        quotient = big//<span class="number">2</span></span><br><span class="line">        module = big%<span class="number">2</span></span><br><span class="line">        print(str(big)+<span class="string">'/2 = '</span>+str(quotient)+<span class="string">'...'</span>+str(module))</span><br><span class="line">        bin1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">2</span></span><br><span class="line">            quotient = quotient//<span class="number">2</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/2 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            bin1 = str(module) + bin1</span><br><span class="line">        <span class="comment">#小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span>+<span class="string">'%.2f'</span>%small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small*<span class="number">2</span></span><br><span class="line">                printint = int(small)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall +<span class="string">'*2 = '</span>+ <span class="string">'%.2f'</span>%small +<span class="string">'...'</span>+ str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">1</span>)</span><br><span class="line">                    small = small - <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(bin2) &gt; <span class="number">5</span>: <span class="comment">#二进制小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            bin2 = <span class="string">'.'</span> + bin2</span><br><span class="line">        print(str(dec)+<span class="string">'的二进制表示是'</span>+bin1+bin2+ <span class="string">'(小数点后保留6位)\n'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Hex</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'---转换为十六进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span> + str(big))</span><br><span class="line">        quotient = big // <span class="number">16</span></span><br><span class="line">        module = big % <span class="number">16</span></span><br><span class="line">        print(str(big)+ <span class="string">'/16 = '</span> +str(quotient)+ <span class="string">'...'</span> +str(module))</span><br><span class="line">        hex1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">16</span></span><br><span class="line">            quotient = quotient // <span class="number">16</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/16 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            hex1 = str(module) + hex1</span><br><span class="line">        <span class="comment"># 小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span> + <span class="string">'%.2f'</span> % small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small * <span class="number">16</span></span><br><span class="line">                printint = str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall + <span class="string">'*16 = '</span> + <span class="string">'%.2f'</span>%small + <span class="string">'...'</span> +str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    hex2 = hex2 + str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                    small = small - int(small)</span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    hex2 = hex2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(hex2) &gt; <span class="number">5</span>:  <span class="comment"># 小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            hex2 = <span class="string">'.'</span>+hex2</span><br><span class="line">        print(str(dec)+<span class="string">'的十六进制表示是'</span>+hex1+hex2+ <span class="string">'(小数保留6位)'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Dec2Bin(decs)</span><br><span class="line">Dec2Hex(decs)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python中的切片操作</title>
+    <url>/2020/05/19/Python%E4%B8%AD%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<p>Python中字符串可以进行切片操作，以下的例子详尽地展示了各种方式下的运用。</p>
+<p>需要注意的是，Python的最后一项索引为 <code>-1</code> </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str = <span class="string">'0123456789'</span>  <span class="comment">#str[start:stop:step]   遵循【左闭右开】规则              输出</span></span><br><span class="line"></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment">#截取第一位到第三位的字符                 　　　　　　　　　　#012</span></span><br><span class="line">print(str[<span class="number">1</span>:<span class="number">5</span>])     <span class="comment">#截取第二位到第六位之前的字符              　　　　　　　　　　#1234</span></span><br><span class="line">print(str[:])       <span class="comment">#截取字符串的全部字符                     　　　　　　　　   #0123456789</span></span><br><span class="line">print(str[<span class="number">6</span>:])      <span class="comment">#截取第七个字符到结尾                     　　　　　　　   　#6789</span></span><br><span class="line">print(str[:<span class="number">-3</span>])     <span class="comment">#截取从头开始到倒数第三个字符之前           　　　　　　　   　#0123456</span></span><br><span class="line">print(str[<span class="number">2</span>])       <span class="comment">#截取第三个字符                           　　　　　　      #2</span></span><br><span class="line">print(str[<span class="number">-1</span>])      <span class="comment">#截取倒数第一个字符                    　　　　　　　　      #9</span></span><br><span class="line">print(str[::<span class="number">-1</span>])    <span class="comment">#创造一个与原字符串顺序相反的字符串        　　　　　　　  　  #9876543210</span></span><br><span class="line">print(str[<span class="number">-3</span>:<span class="number">-1</span>])   <span class="comment">#截取倒数第三位与倒数第一位之前的字符       　　　　　　　 　  #78</span></span><br><span class="line">print(str[<span class="number">-3</span>:])     <span class="comment">#截取倒数第三位到结尾                    　　　　　　　   　 #789</span></span><br><span class="line">print(str[:<span class="number">-5</span>:<span class="number">-3</span>])  <span class="comment">#逆序截取，步长为3                     　　　　　　　　　　  #96</span></span><br><span class="line">print(str[<span class="number">9</span>:<span class="number">0</span>:<span class="number">-1</span>])  <span class="comment">#逆序截取，起始值为列表的第10为数，到列表第1位数之前的数结束，　　#987654321</span></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">12</span>])    <span class="comment">#截取全部元素</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>转载于 <a href="https://www.cnblogs.com/gengyufei/p/11316839.html" target="_blank" rel="noopener">https://www.cnblogs.com/gengyufei/p/11316839.html</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么1/2=0?</title>
+    <url>/2020/02/26/%E4%B8%BA%E4%BB%80%E4%B9%881-2-0/</url>
+    <content><![CDATA[<blockquote>
+<p>C primer plus 课后作业 3.11.8</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cup; <span class="comment">//1cup=0.5pint=8ounce=16big=48small</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"How many cups?\n"</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;cup);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d Cup is %f in pint,%d in ounce,%d in big and %d in small"</span>,cup, cup/<span class="number">2</span>, cup*<span class="number">8</span>, cup*<span class="number">16</span>, cup*<span class="number">48</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//output: 1 Cup is 0 in pint,8 in ouns,16 in big and 48 in small</span></span><br><span class="line"><span class="comment">//cup/2改成cup*0.5</span></span><br><span class="line"><span class="comment">//output: 1 Cup is 0.500000 in pint,8 in ounce,16 in big and 48 in small</span></span><br></pre></td></tr></table></figure>
+
+<p>查阅发现<br>C的除法，当两边都是int型数时，做整除运算，1/2=0<br>如果两边至少有一个为float或者double，那么将做一般的除法，1.0/2=0.5 。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">float</span> c=<span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f"</span>,cup/c); </span><br><span class="line"><span class="comment">//output : 0.500000</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BS4实现简易起点小说爬虫</title>
     <url>/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前两天写了一个针对福利吧的爬虫</p>
@@ -88,54 +136,6 @@
       </tags>
   </entry>
   <entry>
-    <title>为什么1/2=0?</title>
-    <url>/2020/02/26/%E4%B8%BA%E4%BB%80%E4%B9%881-2-0/</url>
-    <content><![CDATA[<blockquote>
-<p>C primer plus 课后作业 3.11.8</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> cup; <span class="comment">//1cup=0.5pint=8ounce=16big=48small</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"How many cups?\n"</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;cup);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d Cup is %f in pint,%d in ounce,%d in big and %d in small"</span>,cup, cup/<span class="number">2</span>, cup*<span class="number">8</span>, cup*<span class="number">16</span>, cup*<span class="number">48</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">//output: 1 Cup is 0 in pint,8 in ouns,16 in big and 48 in small</span></span><br><span class="line"><span class="comment">//cup/2改成cup*0.5</span></span><br><span class="line"><span class="comment">//output: 1 Cup is 0.500000 in pint,8 in ounce,16 in big and 48 in small</span></span><br></pre></td></tr></table></figure>
-
-<p>查阅发现<br>C的除法，当两边都是int型数时，做整除运算，1/2=0<br>如果两边至少有一个为float或者double，那么将做一般的除法，1.0/2=0.5 。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">float</span> c=<span class="number">2.0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%f"</span>,cup/c); </span><br><span class="line"><span class="comment">//output : 0.500000</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>C</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python中的切片操作</title>
-    <url>/2020/05/19/Python%E4%B8%AD%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<p>Python中字符串可以进行切片操作，以下的例子详尽地展示了各种方式下的运用。</p>
-<p>需要注意的是，Python的最后一项索引为 <code>-1</code> </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">str = <span class="string">'0123456789'</span>  <span class="comment">#str[start:stop:step]   遵循【左闭右开】规则              输出</span></span><br><span class="line"></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">3</span>])     <span class="comment">#截取第一位到第三位的字符                 　　　　　　　　　　#012</span></span><br><span class="line">print(str[<span class="number">1</span>:<span class="number">5</span>])     <span class="comment">#截取第二位到第六位之前的字符              　　　　　　　　　　#1234</span></span><br><span class="line">print(str[:])       <span class="comment">#截取字符串的全部字符                     　　　　　　　　   #0123456789</span></span><br><span class="line">print(str[<span class="number">6</span>:])      <span class="comment">#截取第七个字符到结尾                     　　　　　　　   　#6789</span></span><br><span class="line">print(str[:<span class="number">-3</span>])     <span class="comment">#截取从头开始到倒数第三个字符之前           　　　　　　　   　#0123456</span></span><br><span class="line">print(str[<span class="number">2</span>])       <span class="comment">#截取第三个字符                           　　　　　　      #2</span></span><br><span class="line">print(str[<span class="number">-1</span>])      <span class="comment">#截取倒数第一个字符                    　　　　　　　　      #9</span></span><br><span class="line">print(str[::<span class="number">-1</span>])    <span class="comment">#创造一个与原字符串顺序相反的字符串        　　　　　　　  　  #9876543210</span></span><br><span class="line">print(str[<span class="number">-3</span>:<span class="number">-1</span>])   <span class="comment">#截取倒数第三位与倒数第一位之前的字符       　　　　　　　 　  #78</span></span><br><span class="line">print(str[<span class="number">-3</span>:])     <span class="comment">#截取倒数第三位到结尾                    　　　　　　　   　 #789</span></span><br><span class="line">print(str[:<span class="number">-5</span>:<span class="number">-3</span>])  <span class="comment">#逆序截取，步长为3                     　　　　　　　　　　  #96</span></span><br><span class="line">print(str[<span class="number">9</span>:<span class="number">0</span>:<span class="number">-1</span>])  <span class="comment">#逆序截取，起始值为列表的第10为数，到列表第1位数之前的数结束，　　#987654321</span></span><br><span class="line">print(str[<span class="number">0</span>:<span class="number">12</span>])    <span class="comment">#截取全部元素</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>转载于 <a href="https://www.cnblogs.com/gengyufei/p/11316839.html" target="_blank" rel="noopener">https://www.cnblogs.com/gengyufei/p/11316839.html</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python实现dec转hex,bin并打印步骤</title>
-    <url>/2020/02/20/Python%E5%AE%9E%E7%8E%B0dec%E8%BD%AChex-bin%E5%B9%B6%E6%89%93%E5%8D%B0%E6%AD%A5%E9%AA%A4/</url>
-    <content><![CDATA[<blockquote>
-<p>计算机基础课程的作业：</p>
-<p>将十进制数35.75分别转换成二进制数与十六进制数 ，并附计算过程</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">decs = [<span class="number">35.75</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Bin</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'待转换数字为:'</span> + str(dec))</span><br><span class="line">        print(<span class="string">'---转换为二进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span>+str(big))</span><br><span class="line">        quotient = big//<span class="number">2</span></span><br><span class="line">        module = big%<span class="number">2</span></span><br><span class="line">        print(str(big)+<span class="string">'/2 = '</span>+str(quotient)+<span class="string">'...'</span>+str(module))</span><br><span class="line">        bin1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">2</span></span><br><span class="line">            quotient = quotient//<span class="number">2</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/2 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            bin1 = str(module) + bin1</span><br><span class="line">        <span class="comment">#小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span>+<span class="string">'%.2f'</span>%small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            bin2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small*<span class="number">2</span></span><br><span class="line">                printint = int(small)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall +<span class="string">'*2 = '</span>+ <span class="string">'%.2f'</span>%small +<span class="string">'...'</span>+ str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">1</span>)</span><br><span class="line">                    small = small - <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    bin2 = bin2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(bin2) &gt; <span class="number">5</span>: <span class="comment">#二进制小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            bin2 = <span class="string">'.'</span> + bin2</span><br><span class="line">        print(str(dec)+<span class="string">'的二进制表示是'</span>+bin1+bin2+ <span class="string">'(小数点后保留6位)\n'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dec2Hex</span><span class="params">(decs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> dec <span class="keyword">in</span> decs:</span><br><span class="line">        big = int(dec)</span><br><span class="line">        small = dec - big</span><br><span class="line">        <span class="comment">#整数处理开始</span></span><br><span class="line">        print(<span class="string">'---转换为十六进制---'</span>)</span><br><span class="line">        print(<span class="string">'整数部分是:'</span> + str(big))</span><br><span class="line">        quotient = big // <span class="number">16</span></span><br><span class="line">        module = big % <span class="number">16</span></span><br><span class="line">        print(str(big)+ <span class="string">'/16 = '</span> +str(quotient)+ <span class="string">'...'</span> +str(module))</span><br><span class="line">        hex1 = str(module)</span><br><span class="line">        <span class="keyword">while</span> quotient &gt; <span class="number">0</span>:</span><br><span class="line">            printbig = quotient</span><br><span class="line">            module = quotient % <span class="number">16</span></span><br><span class="line">            quotient = quotient // <span class="number">16</span></span><br><span class="line">            print(str(printbig) + <span class="string">'/16 = '</span> + str(quotient) + <span class="string">'...'</span> + str(module))</span><br><span class="line">            hex1 = str(module) + hex1</span><br><span class="line">        <span class="comment"># 小数处理开始</span></span><br><span class="line">        print(<span class="string">'小数部分是:'</span> + <span class="string">'%.2f'</span> % small)</span><br><span class="line">        <span class="keyword">if</span> small == <span class="number">0</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            hex2 = <span class="string">''</span></span><br><span class="line">            <span class="keyword">while</span> small != <span class="number">0</span>:</span><br><span class="line">                printsmall = small</span><br><span class="line">                small = small * <span class="number">16</span></span><br><span class="line">                printint = str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                print(<span class="string">'%.2f'</span>%printsmall + <span class="string">'*16 = '</span> + <span class="string">'%.2f'</span>%small + <span class="string">'...'</span> +str(printint))</span><br><span class="line">                <span class="keyword">if</span> small &gt;= <span class="number">1</span>:</span><br><span class="line">                    hex2 = hex2 + str(int(small)).replace(<span class="string">'10'</span>, <span class="string">'A'</span>).replace(<span class="string">'11'</span>, <span class="string">'B'</span>).replace(<span class="string">'12'</span>, <span class="string">'C'</span>).replace(<span class="string">'13'</span>, <span class="string">'D'</span>).replace(<span class="string">'14'</span>, <span class="string">'E'</span>).replace(<span class="string">'15'</span>, <span class="string">'F'</span>).replace(<span class="string">'16'</span>, <span class="string">'10'</span>)</span><br><span class="line">                    small = small - int(small)</span><br><span class="line">                <span class="keyword">elif</span> small &gt; <span class="number">0</span>:</span><br><span class="line">                    hex2 = hex2 + str(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> len(hex2) &gt; <span class="number">5</span>:  <span class="comment"># 小数保留六位</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            hex2 = <span class="string">'.'</span>+hex2</span><br><span class="line">        print(str(dec)+<span class="string">'的十六进制表示是'</span>+hex1+hex2+ <span class="string">'(小数保留6位)'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Dec2Bin(decs)</span><br><span class="line">Dec2Hex(decs)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>为什么INT_MAX和INT_MIN绝对值不相等</title>
     <url>/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/</url>
     <content><![CDATA[<blockquote>
@@ -160,6 +160,60 @@
 ]]></content>
       <tags>
         <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用API获取学堂在线课堂练习答案</title>
+    <url>/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/</url>
+    <content><![CDATA[<h2 id="补充-本文仅仅涉及到单选题"><a href="#补充-本文仅仅涉及到单选题" class="headerlink" title="补充:本文仅仅涉及到单选题"></a>补充:本文仅仅涉及到单选题</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文内容会涉及到以下文章的内容，建议首先阅读以下文章</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/bakaft/p/12670088.html" target="_blank" rel="noopener">https://www.cnblogs.com/bakaft/p/12670088.html</a></p>
+<p>学堂在线课程页面URL和JSON的简单分析</p>
+</blockquote>
+<h2 id="先康康效果"><a href="#先康康效果" class="headerlink" title="先康康效果"></a>先康康效果</h2><p><img src="/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/1.png" alt="1"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>学堂在线的课堂练习题目通过下面这个API返回</p>
+<blockquote>
+<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
+<p>其中的 224269 在后文会提及     </p>
+<p>发送GET请求时应携带cookies</p>
+<p>API返回形式:json</p>
+</blockquote>
+<p>之前看到有人写了个优学院(Ulearning)自动答题脚本，原理就是利用了优学院的获取答案的API</p>
+<p>我就想看看，这个json里会不会有答案呢？</p>
+<p>结果看了一下，还真就有。。</p>
+<p>JSON结构在这里不多分析了，直接看答案在哪</p>
+<p>如图<img src="/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/2.png" alt="2"></p>
+<p>JSON-data-probelms-x(问题序号,从0开始)-user-answer</p>
+<p>(原谅我笨拙的表达方法..不太懂json)</p>
+<h2 id="简单的python实现"><a href="#简单的python实现" class="headerlink" title="简单的python实现"></a>简单的python实现</h2><p>拿这个练习举例</p>
+<blockquote>
+<p><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122</a></p>
+</blockquote>
+<blockquote>
+<p>然而，它最终对应的题目数据API链接是</p>
+<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
+</blockquote>
+<p>这里，1340122就是<strong>上篇文章</strong>提到的页id，而这个 <code>224269</code> ，方便起见，我这里就叫它 <code>答案ID</code> 吧</p>
+<p>那么这个答案ID是怎么来的？</p>
+<blockquote>
+<p>在这个API返回的json里</p>
+<p><a href="https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376</a></p>
+<p>这个URL的参数在上篇文章都有提及</p>
+<p>请带cookies发送GET请求</p>
+<p>通过这个，可以查询到当前 <code>页</code>的信息，也就是 <code>leaf_info</code></p>
+<p>其中可以提取到 <code>leaf_type_id</code> ，也就是我说的 <code>答案ID</code> </p>
+<p>目前来看，只有 <code>exercise</code>  和<code>quiz</code>类型的 <code>页</code> 对象 才会有具体值,其他对象的 <code>leaf_type_id</code> 值为 <code>null</code></p>
+</blockquote>
+<p>完成上面的理解之后，就可以拿Python来写个小程序实现一下</p>
+<p>代码风格不太健康，仅供参考</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers =&#123;&#125;  <span class="comment">#只需要提供cookie就好</span></span><br><span class="line">response = requests.get(<span class="string">'https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224270/'</span>, headers=headers)</span><br><span class="line"></span><br><span class="line">Dict = response.json() <span class="comment">#把json直接转成dict</span></span><br><span class="line">problems = Dict[<span class="string">'data'</span>][<span class="string">'problems'</span>]</span><br><span class="line">answers = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> problem <span class="keyword">in</span> problems:</span><br><span class="line">    answer = problem[<span class="string">'user'</span>][<span class="string">'answer'</span>][<span class="number">0</span>]</span><br><span class="line">    answers = answers + answer</span><br><span class="line">print(<span class="string">'答案就是！！'</span> + answers)</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#答案就是！！CCCAACCCCBAC</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>瞎折腾</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>学堂在线</tag>
+        <tag>API</tag>
       </tags>
   </entry>
   <entry>
@@ -227,60 +281,6 @@
       <tags>
         <tag>Python</tag>
         <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用API获取学堂在线课堂练习答案</title>
-    <url>/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/</url>
-    <content><![CDATA[<h2 id="补充-本文仅仅涉及到单选题"><a href="#补充-本文仅仅涉及到单选题" class="headerlink" title="补充:本文仅仅涉及到单选题"></a>补充:本文仅仅涉及到单选题</h2><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文内容会涉及到以下文章的内容，建议首先阅读以下文章</p>
-<blockquote>
-<p><a href="https://www.cnblogs.com/bakaft/p/12670088.html" target="_blank" rel="noopener">https://www.cnblogs.com/bakaft/p/12670088.html</a></p>
-<p>学堂在线课程页面URL和JSON的简单分析</p>
-</blockquote>
-<h2 id="先康康效果"><a href="#先康康效果" class="headerlink" title="先康康效果"></a>先康康效果</h2><p><img src="/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/1.png" alt="1"></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>学堂在线的课堂练习题目通过下面这个API返回</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-<p>其中的 224269 在后文会提及     </p>
-<p>发送GET请求时应携带cookies</p>
-<p>API返回形式:json</p>
-</blockquote>
-<p>之前看到有人写了个优学院(Ulearning)自动答题脚本，原理就是利用了优学院的获取答案的API</p>
-<p>我就想看看，这个json里会不会有答案呢？</p>
-<p>结果看了一下，还真就有。。</p>
-<p>JSON结构在这里不多分析了，直接看答案在哪</p>
-<p>如图<img src="/2020/04/29/%E5%88%A9%E7%94%A8API%E8%8E%B7%E5%8F%96%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88/2.png" alt="2"></p>
-<p>JSON-data-probelms-x(问题序号,从0开始)-user-answer</p>
-<p>(原谅我笨拙的表达方法..不太懂json)</p>
-<h2 id="简单的python实现"><a href="#简单的python实现" class="headerlink" title="简单的python实现"></a>简单的python实现</h2><p>拿这个练习举例</p>
-<blockquote>
-<p><a href="https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122" target="_blank" rel="noopener">https://next.xuetangx.com/learn/THU05021000376/THU05021000376/1515481/exercise/1340122</a></p>
-</blockquote>
-<blockquote>
-<p>然而，它最终对应的题目数据API链接是</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224269/</a></p>
-</blockquote>
-<p>这里，1340122就是<strong>上篇文章</strong>提到的页id，而这个 <code>224269</code> ，方便起见，我这里就叫它 <code>答案ID</code> 吧</p>
-<p>那么这个答案ID是怎么来的？</p>
-<blockquote>
-<p>在这个API返回的json里</p>
-<p><a href="https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376" target="_blank" rel="noopener">https://next.xuetangx.com/api/v1/lms/learn/leaf_info/1515481/1340122/?sign=THU05021000376</a></p>
-<p>这个URL的参数在上篇文章都有提及</p>
-<p>请带cookies发送GET请求</p>
-<p>通过这个，可以查询到当前 <code>页</code>的信息，也就是 <code>leaf_info</code></p>
-<p>其中可以提取到 <code>leaf_type_id</code> ，也就是我说的 <code>答案ID</code> </p>
-<p>目前来看，只有 <code>exercise</code>  和<code>quiz</code>类型的 <code>页</code> 对象 才会有具体值,其他对象的 <code>leaf_type_id</code> 值为 <code>null</code></p>
-</blockquote>
-<p>完成上面的理解之后，就可以拿Python来写个小程序实现一下</p>
-<p>代码风格不太健康，仅供参考</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers =&#123;&#125;  <span class="comment">#只需要提供cookie就好</span></span><br><span class="line">response = requests.get(<span class="string">'https://next.xuetangx.com/api/v1/lms/exercise/get_exercise_list/224270/'</span>, headers=headers)</span><br><span class="line"></span><br><span class="line">Dict = response.json() <span class="comment">#把json直接转成dict</span></span><br><span class="line">problems = Dict[<span class="string">'data'</span>][<span class="string">'problems'</span>]</span><br><span class="line">answers = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> problem <span class="keyword">in</span> problems:</span><br><span class="line">    answer = problem[<span class="string">'user'</span>][<span class="string">'answer'</span>][<span class="number">0</span>]</span><br><span class="line">    answers = answers + answer</span><br><span class="line">print(<span class="string">'答案就是！！'</span> + answers)</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#答案就是！！CCCAACCCCBAC</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>瞎折腾</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>学堂在线</tag>
-        <tag>API</tag>
       </tags>
   </entry>
   <entry>
