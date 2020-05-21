@@ -608,4 +608,33 @@
         <tag>Python</tag>
       </tags>
   </entry>
+  <entry>
+    <title>解决部分Hexo主题的tag页无内容的情况</title>
+    <url>/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/</url>
+    <content><![CDATA[<p>我在更换了<a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank" rel="noopener">Ayer</a>这款主题之后，按照如下方法进行了Tag页的创建。</p>
+<p>首先创建一个Page <code>$ hexo new page tags</code></p>
+<p>然后编辑 <code>/source/tags/index.md</code> ，在结尾的分隔符上插入一行 <code>type: tags</code></p>
+<p>最后编辑一下<code>/themes/ayer/_config.yml</code>,  在menu下插入一行<code>Tags: /tags</code></p>
+<p>然后…emmmm….和平时创建的Page是同一个效果，不对劲。</p>
+<p><img src="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/1.png" alt="1"></p>
+<p>经过多次搜索，我终于找到了问题所在。</p>
+<p>以下引用知乎用户 @<a href="https://www.zhihu.com/people/mrcxt" target="_blank" rel="noopener">虾哔哔</a>  的<a href="https://www.zhihu.com/question/29017171/answer/364705653" target="_blank" rel="noopener">部分回答内容</a>。</p>
+<blockquote>
+<p>编辑index.md文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">type: tags</span><br><span class="line">layout: tags</span><br><span class="line">---</span><br><span class="line">&#x2F;&#x2F; 原文内容title和layout后的tags其实都是带了双引号的，但是我实测有无皆可。</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点来了</strong></p>
+<p>注意！这里面最重要的就是 layout 选项，后面的参数对应的是你 主题文件夹下 layout文件夹下第一级的布局文件。比如，我的主题是用ejs写的，那么对应的就是layout/tags.ejs，如果没有，那么就会出现空白的现象！<br>如果你的tags文件的命名时a.ejs，那么你就应该写成 layout: “a”。</p>
+</blockquote>
+<p>我去翻看了一下我主题的<code>layout</code>文件夹，确实存在各种页面的预设布局，</p>
+<p>我如上操作之后，再次刷新页面，果然看到了正常的标签页。</p>
+<p><img src="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/2.png" alt="2"></p>
+]]></content>
+      <categories>
+        <category>瞎折腾</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
 </search>
