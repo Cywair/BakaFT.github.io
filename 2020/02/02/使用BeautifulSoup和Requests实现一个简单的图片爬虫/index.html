@@ -128,7 +128,7 @@
 <h3 id="3-前置工作"><a href="#3-前置工作" class="headerlink" title="3.前置工作"></a>3.前置工作</h3><p>首先，得知道图片都在哪个位置</p>
 <p>我在这里拿 <a href="https://fulibus.net/2020004.html/2" target="_blank" rel="noopener">https://fulibus.net/2020004.html/2</a> 做个例子</p>
 <p>使用Chrome Dev Tools 的 Elements 选项卡来观察一下页面结构</p>
-<p><img src="/hexo/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
 <p>可以看到，文章里的每个图片都在一个单独的 <code>img</code> 标签里，而这些标签属于若干个<code>p</code>标签，最后，这些<code>p</code>标签属于一个类别(class)名为article-content的<code>article</code>标签，很明显，这个标签就是文章的主体。</p>
 <p>接下来是 Request Headers头的模拟，对于福利吧，只需要UA就够了,</p>
 <p>我在 WhatsMyUA.info 获取到了自己的UA</p>
@@ -139,14 +139,14 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import requests</span><br><span class="line">import os #文件操作</span><br><span class="line">headers &#x3D; &#123;&#39;User-Agent&#39;:&quot;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36&quot;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>整个程序的思路大概是这样</p>
-<p><img src="/hexo/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
 <p>为了简化程序，所有的文件读写操作都在同一个目录进行。</p>
 <p>从脑图里分析一下，整个程序应该是两个循环嵌套在一起组成的，这里我用两个for循环实现了整个流程。</p>
 <p>先把第一个循环写出来</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">for line in open(&#39;url.txt&#39;):</span><br><span class="line">        url&#x3D; line   #逐行循环读取url.txt</span><br><span class="line">        print(url)     #在Console返回当前正在解析下载的url</span><br><span class="line">        request &#x3D; requests.get(url, headers&#x3D;headers)  #通过request.get获得页面</span><br><span class="line">        source &#x3D; request.text  #获得页面的文本形式源码</span><br><span class="line">        print(request)   #返回HTTP状态码</span><br><span class="line">        page_soup &#x3D; BeautifulSoup(source, &#39;html.parser&#39;)</span><br><span class="line">        #使用BeautifulSoup并调用内置html.parser解析器对html页面源码进行解析</span><br><span class="line">        imgs &#x3D; page_soup.find(&#39;article&#39;, &#123;&#39;class&#39;: &#39;article-content&#39;&#125;).find_all(&#39;img&#39;)</span><br><span class="line">        # 寻找类别名为article-content的article标签，并寻找里面所有的img标签，放在imgs列表里</span><br></pre></td></tr></table></figure>
 
 <p>扔到Jupyer Notebook跑一下看看</p>
-<p><img src="/hexo/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
 <p>这里我顺便把 imgs 打印了一下，可以看到对于每次循环都会有3次输出</p>
 <p>1.当前循环中的URL</p>
 <p>2.爬虫访问URL返回的HTTP状态码</p>
@@ -156,10 +156,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for each in imgs:    #循环依次选定imgs列表中的每一个img标签</span><br><span class="line">    imgurl &#x3D; each[&#39;src&#39;]  #循环提取img标签中的src值并赋给imgurl</span><br><span class="line">    imgsource &#x3D; requests.get(imgurl, headers&#x3D;headers).content  #通过requests.get的方法获得图片的二进制内容</span><br><span class="line">    filename &#x3D; os.path.basename(imgurl)  #定义一个变量，储存文件的原名</span><br><span class="line">    f &#x3D; open(filename, &#39;wb&#39;)  #新建一个名字为filename的文件，通过二进制方式写入</span><br><span class="line">    f.write(imgsource)  #将imgsource写入文件中</span><br><span class="line">    f.close() #关闭文件，解除占用</span><br></pre></td></tr></table></figure>
 
 <p>把程序块拼起来，跑一下试试</p>
-<p><img src="/hexo/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/4.png" alt="4"></p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/4.png" alt="4"></p>
 <p>由于福利吧直接把图扔到微博图床再贴到文章里，所以文件名都比较不规则。</p>
 <p>如果你想的话，可以采用 数字+扩展名 的方式进行保存。</p>
-<p><img src="/hexo/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/5.png" alt="5"></p>
+<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/5.png" alt="5"></p>
 
       
       <!-- reward -->
