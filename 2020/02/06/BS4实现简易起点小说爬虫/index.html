@@ -56,12 +56,12 @@
 
     
     <div class="article-meta">
-      <a href="/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
+      <a href="/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
   <time datetime="2020-02-06T15:50:58.000Z" itemprop="datePublished">2020-02-06</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
+    <a class="article-category-link" href="/hexo/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
   </div>
 
       
@@ -116,7 +116,7 @@
 <li>几种常见编码</li>
 </ul>
 <p>我选择的是起点小说网，差不多是国内的老大了吧。我小学读的那本《神鬼剑士》就是起点连载的，怀念呀，可惜不知道为什么下架了。</p>
-<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p><img src="/hexo/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/1.png" alt="1"></p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>先简单了解一下起点小说网</p>
 <h3 id="1-作品结构：书，卷，章"><a href="#1-作品结构：书，卷，章" class="headerlink" title="1.作品结构：书，卷，章"></a>1.作品结构：书，卷，章</h3><h3 id="2-小说分类"><a href="#2-小说分类" class="headerlink" title="2.小说分类"></a>2.小说分类</h3><ul>
 <li>VIP小说：一般都有免费章节，以及收费章节</li>
@@ -159,7 +159,7 @@
 <p>要访问接口，需要至少在Request Headers里添加UA和Rerferer两项</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import json #实现Json转字典</span><br><span class="line">import requests</span><br><span class="line">Book_ID &#x3D; 1016027977</span><br><span class="line">Book_Url &#x3D; &#39;https:&#x2F;&#x2F;book.qidian.com&#x2F;info&#x2F;&#39;+str(Book_ID)+&#39;&#39;</span><br><span class="line">headers &#x3D; &#123;&#39;User-Agent&#39;:&#39;Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;79.0.3945.117 Safari&#x2F;537.36S&#39;, &#39;Referer&#39;:Book_Url&#125;</span><br><span class="line">Json_Url &#x3D; &#39;https:&#x2F;&#x2F;book.qidian.com&#x2F;ajax&#x2F;book&#x2F;category?bookId&#x3D;&#39;+str(Book_ID)+&#39;&#39;</span><br><span class="line">Json_Source &#x3D; requests.get(Json_Url, headers&#x3D;headers).text.encode(encoding&#x3D; &#39;ISO-8859-1&#39;)  #因为Json里含有中文的卷名和章节名，这里附加encoding参数</span><br><span class="line">Dict &#x3D; json.loads(Json_Source)  #Json转字典</span><br><span class="line">print(Dict)</span><br></pre></td></tr></table></figure>
 
-<p>这里我把得到的Json转化为字典打印出来.得到的内容里的中文不需要再转义，把字典处理一下扔到Json格式化工具看一下结构<img src="/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
+<p>这里我把得到的Json转化为字典打印出来.得到的内容里的中文不需要再转义，把字典处理一下扔到Json格式化工具看一下结构<img src="/hexo/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/2.png" alt="2"></p>
 <p>简单做一下已知的注释，其他的感兴趣可自己摸索</p>
 <h2 id="开搞"><a href="#开搞" class="headerlink" title="开搞"></a>开搞</h2><p>先导入一下模块，定义一个计数变量，再把要爬的作品ID写成列表</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">i=<span class="number">1</span></span><br><span class="line">Book_IDs = [<span class="number">1016027977</span>,<span class="number">1012807503</span>,<span class="number">1015216119</span>,<span class="number">1015985387</span>,<span class="number">1016285482</span>,<span class="number">1016824748</span>,<span class="number">3536174</span>,<span class="number">1015181946</span>]</span><br></pre></td></tr></table></figure>
@@ -179,7 +179,7 @@
 <p>调用一下就开搞了</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GetBook_Mobile()</span><br></pre></td></tr></table></figure>
 
-<p><img src="/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
+<p><img src="/hexo/hexo/2020/02/06/BS4%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%B5%B7%E7%82%B9%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/3.png" alt="3"></p>
 
       
       <!-- reward -->
@@ -192,7 +192,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/hexo/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/hexo/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
 
 
     </footer>
@@ -203,7 +203,7 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/" class="article-nav-link">
+      <a href="/hexo/2020/02/16/%E4%B8%BA%E4%BB%80%E4%B9%88INT-MAX%E5%92%8CINT-MIN%E7%BB%9D%E5%AF%B9%E5%80%BC%E4%B8%8D%E7%9B%B8%E7%AD%89/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
@@ -213,7 +213,7 @@
       </a>
     
     
-      <a href="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/" class="article-nav-link">
+      <a href="/hexo/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
         <div class="article-nav-title">使用BeautifulSoup和Requests实现一个简单的图片爬虫</div>
       </a>
@@ -287,31 +287,31 @@
   <ul class="nav nav-main">
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/">Index</a>
+      <a class="nav-item-link" href="/hexo/">Index</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/archives">Archives</a>
+      <a class="nav-item-link" href="/hexo/archives">Archives</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/categories">Categories</a>
+      <a class="nav-item-link" href="/hexo/categories">Categories</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/tags">Tags</a>
+      <a class="nav-item-link" href="/hexo/tags">Tags</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/projects">Projects</a>
+      <a class="nav-item-link" href="/hexo/projects">Projects</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/oneindex.html">OneIndex</a>
+      <a class="nav-item-link" href="/hexo/oneindex.html">OneIndex</a>
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/about">About me</a>
+      <a class="nav-item-link" href="/hexo/about">About me</a>
     </li>
     
   </ul>
@@ -374,7 +374,7 @@
 <!-- Tocbot -->
 
 
-<script src="/js/tocbot.min.js"></script>
+<script src="/hexo/js/tocbot.min.js"></script>
 
 <script>
   tocbot.init({
