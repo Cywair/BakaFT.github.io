@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    使用Pyecharts可视化院内生源数据 |  BakaFT&#39;s blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="post-使用Pyecharts可视化院内生源数据" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  使用Pyecharts可视化院内生源数据
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2020-05-27T10:27:24.000Z" itemprop="datePublished">2020-05-27</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">1.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">7 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h1 id="Pyecharts-简介"><a href="#Pyecharts-简介" class="headerlink" title="Pyecharts 简介"></a>Pyecharts 简介</h1><blockquote>
+<p><a href="https://echarts.apache.org/zh/index.html" target="_blank" rel="noopener">ECharts</a> 是一个使用 JavaScript 实现的开源可视化库，涵盖各行业图表，满足各种需求。凭借着良好的交互性，精巧的图表设计，得到了众多开发者的认可。</p>
+<p>而 Python 是一门富有表达力的语言，很适合用于数据处理。当数据分析遇上数据可视化时，<a href="https://github.com/pyecharts/pyecharts" target="_blank" rel="noopener">Pyecharts</a> 诞生了。</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在学Python，爬取到的很多数据如果可以用可视化的方式来展现的话，那肯定很酷。说到可视化最常见的就是各种图表，于是我就找到了这个东西，正好可以给院内的生源和分流情况做一个分析。</p>
+<h1 id="微小的工作"><a href="#微小的工作" class="headerlink" title="微小的工作"></a>微小的工作</h1><h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><p>首先根据院内的部分公开数据，我整理出了如下格式的Excel表格(后面又加上了分流前后班级class1, class2)</p>
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/1.png" alt="1"></p>
+<p>方便起见，我把表格用CSV保存再转成JSON格式储存，这里用到了<a href="https://www.bejson.com/json/" target="_blank" rel="noopener">BeJSON</a>的在线工具</p>
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/2.png" alt="2"></p>
+<p>这样子在Python中使用JSON模块处理数据会方便一些</p>
+<h3 id="尝试做表"><a href="#尝试做表" class="headerlink" title="尝试做表"></a>尝试做表</h3><p>以下使用到了 <code>Jupyter Notebook</code>进行操作</p>
+<h4 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'FLstudentDATA.json'</span>,<span class="string">'r'</span>, encoding=<span class="string">'gbk'</span>) <span class="keyword">as</span> json_source:</span><br><span class="line">    profile_list = json.load(json_source)</span><br><span class="line">    <span class="comment">#生成了一个由多个字典组成的列表</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="男女数量对比"><a href="#男女数量对比" class="headerlink" title="男女数量对比"></a>男女数量对比</h4><p><a href="https://pyecharts.org/#/zh-cn/basic_charts?id=pie%ef%bc%9a%e9%a5%bc%e5%9b%be" target="_blank" rel="noopener">Pyecharts文档-饼图</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> options <span class="keyword">as</span> opts</span><br><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Pie</span><br><span class="line"><span class="keyword">from</span> pyecharts.faker <span class="keyword">import</span> Faker</span><br><span class="line">male = <span class="number">0</span></span><br><span class="line">female = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> profile <span class="keyword">in</span> profile_list:</span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">        male = male + <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">        female = female + <span class="number">1</span></span><br><span class="line">pie = Pie() <span class="comment">#参数在之后传递</span></span><br><span class="line">pie.add(<span class="string">""</span>, [(<span class="string">"蓝"</span>, male),(<span class="string">"吕"</span>, female)])</span><br><span class="line">pie.set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">"2019级外国语学院男女人数比"</span>,subtitle=<span class="string">"不愧是外院"</span>))</span><br><span class="line">pie.set_series_opts(label_opts=opts.LabelOpts(formatter=<span class="string">"&#123;b&#125;: &#123;c&#125;"</span>))</span><br><span class="line">pie.render_notebook() <span class="comment">#直接在Jupyter Notebook中渲染图表</span></span><br><span class="line"><span class="comment">#pie.render() 使用常规方式，生成render.html</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/gender.png" alt="gender"></p>
+<h4 id="专业分流对比"><a href="#专业分流对比" class="headerlink" title="专业分流对比"></a>专业分流对比</h4><p>依旧是饼图，不过采用了与之前不同的参数设定方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pie_sort</span><span class="params">(labels,sizes)</span>:</span></span><br><span class="line">    c = (</span><br><span class="line">        Pie()</span><br><span class="line">        .add(<span class="string">""</span>,[list(z) <span class="keyword">for</span> z <span class="keyword">in</span> zip(labels,sizes)],rosetype=<span class="string">"radius"</span>,radius=<span class="string">"55%"</span>,center=[<span class="string">"50%"</span>, <span class="string">"50%"</span>],label_opts=opts.LabelOpts(is_show=<span class="literal">False</span>, position=<span class="string">"center"</span>))</span><br><span class="line">        <span class="comment">#玫瑰饼图参数</span></span><br><span class="line">        .set_global_opts(title_opts = opts.TitleOpts(title=<span class="string">"2019级外国语学院分流对比"</span>,subtitle=<span class="string">"苦了今年选师范的同学们了"</span>))</span><br><span class="line">        .set_series_opts(label_opts=opts.LabelOpts(formatter=<span class="string">"&#123;b&#125;:&#123;c&#125;"</span>))</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#.set_colors(["grey", "orange"])</span></span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line">JT, JB, ET, BE, EE = <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> profile <span class="keyword">in</span> profile_list:</span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'日语'</span>:</span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">4</span>] == <span class="string">'日语师范'</span>:</span><br><span class="line">            JT = JT + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">4</span>] == <span class="string">'日语商务'</span>:</span><br><span class="line">            JB = JB +<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'英翻'</span>:</span><br><span class="line">        ET = ET + <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'英师'</span>:</span><br><span class="line">        EE = EE + <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'商英'</span>:</span><br><span class="line">        BE = BE + <span class="number">1</span></span><br><span class="line">labels = [<span class="string">"日语商务"</span>,<span class="string">"日语师范"</span>,<span class="string">"商务英语"</span>,<span class="string">"英语翻译"</span>,<span class="string">"英语师范"</span>]</span><br><span class="line">sizes = [JB,JT,BE,ET,EE]</span><br><span class="line">pie_sort(labels,sizes).render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/directions.png" alt="directions"></p>
+<h4 id="省份分布"><a href="#省份分布" class="headerlink" title="省份分布"></a>省份分布</h4><p><a href="https://pyecharts.org/#/zh-cn/rectangular_charts?id=bar%ef%bc%9a%e6%9f%b1%e7%8a%b6%e5%9b%be%e6%9d%a1%e5%bd%a2%e5%9b%be" target="_blank" rel="noopener">Pyecharts-柱状图</a></p>
+<p>我采用了Excel自带的数据分析把每个省的人数统计了一下并整理到了<code>province.json</code></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">&#123;<span class="attr">"province"</span>:<span class="string">"安徽"</span>,<span class="attr">"number"</span>:<span class="string">"2"</span>&#125;,</span><br><span class="line">&#123;<span class="attr">"province"</span>:<span class="string">"广东"</span>,<span class="attr">"number"</span>:<span class="string">"3"</span>&#125;,</span><br><span class="line">&#123;<span class="attr">"province"</span>:<span class="string">"广西"</span>,<span class="attr">"number"</span>:<span class="string">"9"</span>&#125;,</span><br><span class="line">&#123;<span class="attr">"province"</span>:<span class="string">"贵州"</span>,<span class="attr">"number"</span>:<span class="string">"4"</span>&#125;,</span><br><span class="line">&#123;<span class="attr">"province"</span>:<span class="string">"海南"</span>,<span class="attr">"number"</span>:<span class="string">"2"</span>&#125;,</span><br><span class="line">......</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Bar</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> options <span class="keyword">as</span> opts</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'province.json'</span>,<span class="string">'r'</span>, encoding=<span class="string">'gbk'</span>) <span class="keyword">as</span> json_province:</span><br><span class="line">    province_list = json.load(json_province)</span><br><span class="line">print(province_list)</span><br><span class="line">columns = []</span><br><span class="line">count = []</span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> province_list:</span><br><span class="line">    columns.append(d[<span class="string">'province'</span>])</span><br><span class="line">    count.append(d[<span class="string">'number'</span>])    </span><br><span class="line">bar = (</span><br><span class="line">    Bar()</span><br><span class="line">    .add_xaxis(columns)</span><br><span class="line">    .add_yaxis(<span class="string">"人数"</span>, count)</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">"2019级外国语学院各省生源"</span>,subtitle=<span class="string">"主客分明"</span>),xaxis_opts=opts.AxisOpts(name_rotate=<span class="number">60</span>,axislabel_opts=&#123;<span class="string">"rotate"</span>:<span class="number">45</span>&#125;))</span><br><span class="line">) <span class="comment">#这里特别地将X轴斜转了45°，避免被吞字</span></span><br><span class="line">bar.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/province.png" alt="province"></p>
+<h4 id="民族分布"><a href="#民族分布" class="headerlink" title="民族分布"></a>民族分布</h4><p>和省份的差不多，我这里提前统计了一下数字</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">races = [<span class="string">"白族"</span>,<span class="string">"苗族"</span>,<span class="string">"回族"</span>,<span class="string">"土家族"</span>,<span class="string">"汉族"</span>,<span class="string">"壮族"</span>]</span><br><span class="line">races_num = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">29</span>,<span class="number">316</span>,<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">bar = (</span><br><span class="line">    Bar()</span><br><span class="line">    .add_xaxis(races)</span><br><span class="line">    .add_yaxis(<span class="string">"人数"</span>, races_num)</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">"2019级外国语学院各族生源"</span>,subtitle=<span class="string">"五湖四海"</span>),xaxis_opts=opts.AxisOpts(name_rotate=<span class="number">60</span>,axislabel_opts=&#123;<span class="string">"rotate"</span>:<span class="number">45</span>&#125;))</span><br><span class="line">)</span><br><span class="line">bar.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/race.png" alt="race"></p>
+<h4 id="姓氏词云"><a href="#姓氏词云" class="headerlink" title="姓氏词云"></a>姓氏词云</h4><p>当样本数量不够大的时候，姓氏的统计很难用常规的图标来表达，这里采用词云的方法来表示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#尝试统计一下姓，四字取前二作复姓</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter <span class="comment">#计数器</span></span><br><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> WordCloud <span class="comment">#词云</span></span><br><span class="line"><span class="keyword">from</span> pyecharts.globals <span class="keyword">import</span> SymbolType</span><br><span class="line">first_names = []</span><br><span class="line"><span class="keyword">for</span> profile <span class="keyword">in</span> profile_list:</span><br><span class="line">    <span class="keyword">if</span> len(dict[<span class="string">'name'</span>]) == <span class="number">2</span> <span class="keyword">or</span> len(dict[<span class="string">'name'</span>]) == <span class="number">3</span> : </span><br><span class="line">        firstname = dict[<span class="string">'name'</span>][<span class="number">0</span>]</span><br><span class="line">        first_names.append(firstname)</span><br><span class="line">    <span class="keyword">if</span> len(dict[<span class="string">'name'</span>]) == <span class="number">4</span>: <span class="comment">#简单的复姓判断</span></span><br><span class="line">        firstname = dict[<span class="string">'name'</span>][:<span class="number">2</span>]</span><br><span class="line">        first_names.append(firstname)</span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">counter</span><span class="params">(arr)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> Counter(arr).most_common(<span class="number">111</span>) <span class="comment"># 返回出现频率最高的n个数</span></span><br><span class="line"></span><br><span class="line">countdata = counter(first_names)</span><br><span class="line"></span><br><span class="line">wordcloud = (</span><br><span class="line">    WordCloud()</span><br><span class="line">    .add(<span class="string">""</span>, countdata, word_size_range=[<span class="number">25</span>, <span class="number">100</span>], shape=SymbolType.DIAMOND)</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">"2019级外国语学院姓氏词云"</span>,subtitle=<span class="string">"111个姓,你在哪呢?"</span>))</span><br><span class="line">            )</span><br><span class="line">wordcloud.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/wordcloud.png" alt="wordcloud"></p>
+<h4 id="各方向男女比"><a href="#各方向男女比" class="headerlink" title="各方向男女比"></a>各方向男女比</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Bar</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> options <span class="keyword">as</span> opts</span><br><span class="line">jb_m, jb_f = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">je_m, je_f = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">et_f, et_m = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">ee_f, ee_m = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">be_f, be_m = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> profile <span class="keyword">in</span> profile_list:</span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'日语'</span>:</span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">4</span>] == <span class="string">'日语师范'</span>:</span><br><span class="line">            <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">                je_m +=<span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">                je_f +=<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">4</span>] == <span class="string">'日语商务'</span>:</span><br><span class="line">            <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">                jb_m +=<span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">                jb_f +=<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'英翻'</span>:</span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">                et_m +=<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">                et_f +=<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'英师'</span>:</span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">                ee_m +=<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">                ee_f +=<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> profile[<span class="string">'class2'</span>][:<span class="number">2</span>] == <span class="string">'商英'</span>:</span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'男'</span>:</span><br><span class="line">                be_m +=<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> profile[<span class="string">'gender'</span>] == <span class="string">'女'</span>:</span><br><span class="line">                be_f +=<span class="number">1</span></span><br><span class="line">directions = [<span class="string">"日语商务"</span>,<span class="string">"日语师范"</span>,<span class="string">"商务英语"</span>,<span class="string">"英语翻译"</span>,<span class="string">"英语师范"</span>]</span><br><span class="line">male = [jb_m,je_m,be_m,et_m,ee_m]</span><br><span class="line">female = [jb_f,je_f,be_f,et_f,ee_f]</span><br><span class="line"></span><br><span class="line">bar = (</span><br><span class="line">    Bar()</span><br><span class="line">    .add_xaxis(directions)</span><br><span class="line">    .add_yaxis(<span class="string">"蓝棱"</span>, male)</span><br><span class="line">    .add_yaxis(<span class="string">"吕棱"</span>, female)</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">"2019级外院各方向蓝吕比"</span>, subtitle=<span class="string">"全师范的男生就你没脱单惹!"</span>),xaxis_opts=opts.AxisOpts(name_rotate=<span class="number">60</span>,axislabel_opts=&#123;<span class="string">"rotate"</span>:<span class="number">45</span>&#125;))</span><br><span class="line">)</span><br><span class="line">bar.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/gender_directions.png" alt="gender_directions"></p>
+<p>英语师范这个比例有点夸张。。</p>
+<h4 id="各班级男女比"><a href="#各班级男女比" class="headerlink" title="各班级男女比"></a>各班级男女比</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from pyecharts.charts import Bar</span><br><span class="line">from pyecharts import options as opts</span><br><span class="line">class_list &#x3D; [&#39;商英11901&#39;,&#39;商英11902&#39;,&#39;商英11903&#39;,&#39;商英11904&#39;,&#39;英翻11901&#39;,&#39;英翻11902&#39;,&#39;英师11901&#39;,&#39;英师11902&#39;,&#39;英师11903&#39;,&#39;日语商务11901&#39;,&#39;日语师范11901&#39;]</span><br><span class="line">data_male &#x3D; []</span><br><span class="line">data_female &#x3D; []</span><br><span class="line">for  eachclass in class_list:</span><br><span class="line">    male &#x3D; 0</span><br><span class="line">    female &#x3D; 0</span><br><span class="line">    for profile in profile_list:</span><br><span class="line">        if profile[&#39;class2&#39;] &#x3D;&#x3D; eachclass:</span><br><span class="line">            if profile[&#39;gender&#39;] &#x3D;&#x3D; &#39;男&#39;:</span><br><span class="line">                male &#x3D; male + 1</span><br><span class="line">            if profile[&#39;gender&#39;] &#x3D;&#x3D; &#39;女&#39;:</span><br><span class="line">                female &#x3D; female + 1</span><br><span class="line">    data_male.append(male)</span><br><span class="line">    data_female.append(female)</span><br><span class="line">bar &#x3D; (</span><br><span class="line">    Bar()</span><br><span class="line">    .add_xaxis(class_list)</span><br><span class="line">    .add_yaxis(&quot;男&quot;, data_male)</span><br><span class="line">    .add_yaxis(&quot;女&quot;, data_female)</span><br><span class="line">    .set_global_opts(title_opts&#x3D;opts.TitleOpts(title&#x3D;&quot;2019级各班级男女比&quot;, subtitle&#x3D;&quot;&quot;),xaxis_opts&#x3D;opts.AxisOpts(name_rotate&#x3D;60,axislabel_opts&#x3D;&#123;&quot;rotate&quot;:30&#125;))</span><br><span class="line">)</span><br><span class="line">bar.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/05/27/%E4%BD%BF%E7%94%A8Pyecharts%E5%8F%AF%E8%A7%86%E5%8C%96%E9%99%A2%E5%86%85%E7%94%9F%E6%BA%90%E6%95%B0%E6%8D%AE/gender_classes.png" alt="gender_classes"></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Echarts/" rel="tag">Echarts</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">数据可视化</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">解决部分Hexo主题的tag页无内容的情况</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020
+        <i class="ri-heart-fill heart_icon"></i> BakaFT
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Index</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">Categories</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">Tags</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/projects">Projects</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/oneindex.html">OneIndex</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About me</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="https://lib.baomitu.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/jieyou/lazyload@1.4.2/lazyload.min.js"></script>
+
+<!-- Subtitle -->
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+      startDelay: 0,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+    console.log(err)
+  }
+</script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+    
+  </div>
+</body>
+
+</html>
