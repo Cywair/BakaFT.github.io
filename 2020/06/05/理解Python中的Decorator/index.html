@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    解决部分Hexo主题的tag页无内容的情况 |  BakaFT&#39;s blog
+    理解Python中的Decorator |  BakaFT&#39;s blog
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -39,7 +39,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-解决Hexo的tag页无内容的情况" class="article article-type-post" itemscope
+  <article id="post-理解Python中的Decorator" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -47,7 +47,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  解决部分Hexo主题的tag页无内容的情况
+  理解Python中的Decorator
 </h1>
  
 
@@ -56,12 +56,12 @@
 
     
     <div class="article-meta">
-      <a href="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/" class="article-date">
-  <time datetime="2020-05-20T11:18:16.000Z" itemprop="datePublished">2020-05-20</time>
+      <a href="/2020/06/05/%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84Decorator/" class="article-date">
+  <time datetime="2020-06-05T07:31:14.000Z" itemprop="datePublished">2020-06-05</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
   </div>
 
       
@@ -71,7 +71,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">331</span>
+            <span class="post-count">726</span>
         </span>
     </span>
 
@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">3 min</span>
         </span>
     </span>
 </div>
@@ -91,6 +91,8 @@
 
     
     
+    <div class="tocbot"></div>
+
 
 
 
@@ -103,24 +105,24 @@
       
 
       
-      <p>我在更换了<a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank" rel="noopener">Ayer</a>这款主题之后，按照如下方法进行了Tag页的创建。</p>
-<p>首先创建一个Page <code>$ hexo new page tags</code></p>
-<p>然后编辑 <code>/source/tags/index.md</code> ，在结尾的分隔符上插入一行 <code>type: tags</code></p>
-<p>最后编辑一下<code>/themes/ayer/_config.yml</code>,  在menu下插入一行<code>Tags: /tags</code></p>
-<p>然后…emmmm….和平时创建的Page是同一个效果，不对劲。</p>
-<p><img src="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/1.png" alt="1"></p>
-<p>经过多次搜索，我终于找到了问题所在。</p>
-<p>以下引用知乎用户 @<a href="https://www.zhihu.com/people/mrcxt" target="_blank" rel="noopener">虾哔哔</a>  的<a href="https://www.zhihu.com/question/29017171/answer/364705653" target="_blank" rel="noopener">部分回答内容</a>。</p>
-<blockquote>
-<p>编辑index.md文件，内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">type: tags</span><br><span class="line">layout: tags</span><br><span class="line">---</span><br><span class="line">&#x2F;&#x2F; 原文内容title和layout后的tags其实都是带了双引号的，但是我实测有无皆可。</span><br></pre></td></tr></table></figure>
+      <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前看廖雪峰老师的Python教程的时候卡在装饰器那一节，干脆跳了过去。</p>
+<p>现在看到<code>@property</code>的使用，又涉及到了装饰器的相关知识，于是只好回头来好好学一下了。。。</p>
+<p>在了解装饰器之前，建议先了解一下什么是<a href="https://www.cnblogs.com/cicaday/p/python-closure.html" target="_blank" rel="noopener">闭包</a></p>
+<h1 id="什么是装饰器"><a href="#什么是装饰器" class="headerlink" title="什么是装饰器"></a>什么是装饰器</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>装饰器本质上是一个Python函数，它可以让其他函数在不需要做任何代码变动的前提下增加额外功能，装饰器的返回值也是一个函数对象。</p>
+<p>它经常用于有切面需求的场景，比如：插入日志、性能测试、事务处理、缓存、权限校验等场景。装饰器是解决这类问题的绝佳设计，有了装饰器，我们就可以抽离出大量与函数功能本身无关的雷同代码并继续重用。</p>
+<p>概括的讲，装饰器的作用就是为已经存在的对象添加额外的功能。</p>
+<h2 id="结合例子说明"><a href="#结合例子说明" class="headerlink" title="结合例子说明"></a>结合例子说明</h2><p>这里使用两个实际例子来说明一下最基础的装饰器</p>
+<h3 id="日志打印"><a href="#日志打印" class="headerlink" title="日志打印"></a>日志打印</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logger</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kw)</span>:</span></span><br><span class="line">        print(<span class="string">'Start function: &#123;&#125; '</span>.format(func.__name__))</span><br><span class="line">        func(*args, **kw)  <span class="comment">#The function </span></span><br><span class="line">        print(<span class="string">'End'</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@loggers  </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    print(<span class="string">'&#123;&#125; + &#123;&#125; = &#123;&#125;'</span>.format(x, y, x+y))</span><br><span class="line"></span><br><span class="line">add(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#outupt:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Start function: add </span></span><br><span class="line"><span class="comment">#2 + 3 = 5</span></span><br><span class="line"><span class="comment">#End</span></span><br></pre></td></tr></table></figure>
 
-<p><strong>重点来了</strong></p>
-<p>注意！这里面最重要的就是 layout 选项，后面的参数对应的是你 主题文件夹下 layout文件夹下第一级的布局文件。比如，我的主题是用ejs写的，那么对应的就是layout/tags.ejs，如果没有，那么就会出现空白的现象！<br>如果你的tags文件的命名时a.ejs，那么你就应该写成 layout: “a”。</p>
-</blockquote>
-<p>我去翻看了一下我主题的<code>layout</code>文件夹，确实存在各种页面的预设布局，</p>
-<p>我如上操作之后，再次刷新页面，果然看到了正常的标签页。</p>
-<p><img src="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/2.png" alt="2"></p>
+<h3 id="计时器"><a href="#计时器" class="headerlink" title="计时器"></a>计时器</h3><p>计算一个函数的执行时长</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Decorator</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">timer</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kw)</span>:</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        time.sleep(<span class="number">1</span>)    <span class="comment"># Time spent is too short without a sleep</span></span><br><span class="line">        func(*args, **kw)</span><br><span class="line">        end = time.time()</span><br><span class="line">        cost_time = end - start </span><br><span class="line">        print(<span class="string">"Time spent：&#123;&#125;"</span>.format(cost_time))</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@timer  </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    print(<span class="string">'&#123;&#125; + &#123;&#125; = &#123;&#125;'</span>.format(x, y, x+y))</span><br><span class="line">add(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#output:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2 + 3 = 5</span></span><br><span class="line"><span class="comment">#Time spent：1.000917673110962</span></span><br></pre></td></tr></table></figure>
+
+<p>拿计时器这个例子来说</p>
+<p>把<code>@timer</code>放到了<code>add</code>函数的定义，它就像一顶帽子一样戴在这个函数的头上。和这个函数绑定在一起。在我们调用这个函数的时候，第一件事并不是执行这个函数，而是将这个函数做为参数传入它头顶上这顶帽子，这顶帽子我们称之为<code>装饰函数</code> 或 <code>装饰器</code>。</p>
+<p>其实我们做到了这样一个实现:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">timer</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kw)</span>:</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        time.sleep(<span class="number">1</span>)    <span class="comment"># Time spent is too short without a sleep</span></span><br><span class="line">        func(*args, **kw)</span><br><span class="line">        end = time.time()</span><br><span class="line">        cost_time = end - start </span><br><span class="line">        print(<span class="string">"Time spent：&#123;&#125;"</span>.format(cost_time))</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    print(<span class="string">'&#123;&#125; + &#123;&#125; = &#123;&#125;'</span>.format(x, y, x+y))</span><br><span class="line"></span><br><span class="line">timer(add)(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="comment">#output:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2 + 3 = 5</span></span><br><span class="line"><span class="comment">#Time spent：1.000917673110962</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#一般而言，函数后面只有一个括号。如果看见括号后还有一个括号，说明第一个函数返回了一个函数，如果后面还有括号，说明前面那个也返回了一个函数。以此类推。</span></span><br></pre></td></tr></table></figure>
+
+<p><code>timer(add)</code>返回了一个<code>wrapper (*args, **kw)</code> 函数，所以又加了一个<code>(2,3)</code>传入<code>wrapper</code>内供<code>func()</code>调用，这里的<code>func()</code>其实也就是<code>add()</code></p>
 
       
       <!-- reward -->
@@ -133,7 +135,7 @@
     <footer class="article-footer">
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
 
 
     </footer>
@@ -144,19 +146,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/06/05/%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84Decorator/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            理解Python中的Decorator
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/05/19/%E5%B7%A7%E5%A6%99%E8%A7%A3%E5%86%B3%E5%9B%9E%E6%96%87%E6%95%B0%E5%88%A4%E6%96%AD/" class="article-nav-link">
+      <a href="/2020/05/20/%E8%A7%A3%E5%86%B3Hexo%E7%9A%84tag%E9%A1%B5%E6%97%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%83%85%E5%86%B5/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">巧妙解决回文数判断</div>
+        <div class="article-nav-title">解决部分Hexo主题的tag页无内容的情况</div>
       </a>
     
   </nav>
