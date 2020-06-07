@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Android和Windows对同名WIFI的处理 |  BakaFT&#39;s blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="post-Android和Windows对同名Wifi的处理" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Android和Windows对同名WIFI的处理
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/" class="article-date">
+  <time datetime="2020-06-07T01:19:51.000Z" itemprop="datePublished">2020-06-07</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a> / <a class="article-category-link" href="/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>某个群友问了个这样的问题</p>
+<blockquote>
+<p>【复读机】** 6/7/2020 12:24:53 AM<br>如果两个路由器，名字和密码相同的话。</p>
+<p>【复读机】** 6/7/2020 12:25:15 AM<br>他会自动连接近的那一个么？</p>
+</blockquote>
+<p>我挺感兴趣的，因为我也这么想过，但是一直没能亲自实验一下</p>
+<p>这次我就来打算自己试一试</p>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
+<li>我的笔记本<ul>
+<li>Windows10 1909  18363.657</li>
+<li>Intel Wireless-AC 9462</li>
+</ul>
+</li>
+<li>我的手机<ul>
+<li>Android 9 </li>
+<li>MIUI 11.04</li>
+<li>未开启WIFI自动切换</li>
+</ul>
+</li>
+<li>邻居路由<ul>
+<li>2.4Ghz  <ul>
+<li>BSSID是9C开头的</li>
+<li>SSID = FAST_432D98</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>我的路由<ul>
+<li>两个AP的BSSID都是2C开头的</li>
+<li>2.4Ghz<ul>
+<li>SSID = FAST_432D98</li>
+</ul>
+</li>
+<li>5Ghz<ul>
+<li>SSID = BakaFT_5G</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="初探，同名不同密"><a href="#初探，同名不同密" class="headerlink" title="初探，同名不同密"></a>初探，同名不同密</h1><p>为了让情况不那么特殊，这里先使用同样的SSID，但是密码不同。</p>
+<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><p>使用 <code>netsh wlan show networks mode=bssid</code> 查看当前附近的WIFI信息</p>
+<p><img src="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/2.png" alt="2"></p>
+<p>我的AP近一些，所以信号要比邻居的50%强得多</p>
+<p><img src="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/3.png" alt="3"></p>
+<p>可以看到，同一个SSID下出现了两个BSSID，WIFI列表却只能看到一个<code>FAST_432D98</code></p>
+<p>而根据RSSI来判断，我认为这里Windows直接 “二选一择其优”  将我的AP显示在了这里，而邻居的被直接抬走</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=430114655&auto=0&height=32"></iframe>
+
+<p>事实证明是这样的，我输了自家的WIFI密码后成功连接，输入了邻居的密码提示密码不对。</p>
+<p>从开始实验到文章发布，Windows下一直是这样的情况，我也没想到更进一步的方法。</p>
+<h2 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h2><h3 id="表象"><a href="#表象" class="headerlink" title="表象"></a>表象</h3><p>手机这里的现象就比较有意思了</p>
+<p>我在把我家的热点SSID更改为<code>FAST_432D98</code>之前已经连接了邻居的这个热点，改完后并没有影响我手机的连接</p>
+<p>直到手动忘记网络之后，WIFI列表刷到<code>一个</code>信号超强的<code>FAST_432D98</code>，看到这里我觉得，这不是和Windows一样吗？</p>
+<p>但是我输入了邻居的密码后，热点连接上了，并且显示的信号强度迅速降低，很明显我连到了他家的热点。</p>
+<p>我又忘掉了网络，RSSI又蹭蹭涨满了，我就又输入了我家的密码，却连接不上。。</p>
+<p><img src="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/4.jpg" alt="4"></p>
+<h3 id="细思"><a href="#细思" class="headerlink" title="细思"></a>细思</h3><p>看一下安卓的配置文件 <code>/data/misc/wifi/wpa_supplicant.conf</code></p>
+<p>这里给一个 <a href="https://blog.csdn.net/Hh20161314/article/details/84033094" target="_blank" rel="noopener">wpa_supplicant.conf 文件详解</a> 供参考</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### wpa_supplicant configuration file template #####</span></span><br><span class="line"><span class="string">update_config=1</span></span><br><span class="line"><span class="string">ctrl_interface=DIR=/data/system/wpa_supplicant</span> <span class="string">GROUP=wifi</span></span><br><span class="line"><span class="string">eapol_version=1</span></span><br><span class="line"><span class="string">ap_scan=1</span></span><br><span class="line"><span class="string">fast_reauth=1</span></span><br><span class="line"><span class="string">network=&#123;</span></span><br><span class="line"> <span class="string">ssid="818***"</span></span><br><span class="line"> <span class="string">psk="*****"</span></span><br><span class="line"> <span class="string">key_mgmt=WPA-PSK</span></span><br><span class="line"> <span class="string">priority=241</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="string">network=&#123;</span></span><br><span class="line">	<span class="string">ssid="second</span> <span class="string">ssid"</span></span><br><span class="line">	<span class="string">psk="very</span> <span class="string">secret</span> <span class="string">passphrase"</span></span><br><span class="line">	<span class="string">key_mgmt=WPA-PSK</span></span><br><span class="line">	<span class="string">priority=2</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">....</span></span><br></pre></td></tr></table></figure>
+
+<p>只要AP的SSID和配置文件里已保存的符合，那么系统就会认为你已经保存该AP的密码，但是这样其实会产生问题，下面会解释到。</p>
+<p>我们还可以注意到，这里每个SSID下面有一个<code>priority</code> ，这是优先级。</p>
+<blockquote>
+<p>课外小知识，这个文章涉及到了<code>priority</code>的应用</p>
+<p>WiFi之Autojoin对无线网络的选择机制</p>
+<p><a href="https://blog.csdn.net/kris_fei/article/details/74581441" target="_blank" rel="noopener">https://blog.csdn.net/kris_fei/article/details/74581441</a></p>
+</blockquote>
+<p>但是这个优先级是基于SSID的，我们的问题前提就是SSID相同啊？</p>
+<p>没得了。</p>
+<h3 id="networkId"><a href="#networkId" class="headerlink" title="networkId"></a>networkId</h3><p>我们看一下Android Q (API 29) 之前，系统对这个优先级的处理方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reset the priority of each network at start or if it goes too high.  </span></span><br><span class="line"><span class="keyword">if</span> (mLastPriority == -<span class="number">1</span> || mLastPriority &gt; <span class="number">1000000</span>) &#123;  </span><br><span class="line">    <span class="keyword">for</span>(WifiConfiguration config2 : mConfiguredNetworks.values()) &#123;  </span><br><span class="line">        <span class="keyword">if</span> (updatePriorities) &#123;  </span><br><span class="line">            <span class="keyword">if</span> (config2.networkId != INVALID_NETWORK_ID) &#123;  </span><br><span class="line">                config2.priority = <span class="number">0</span>;  </span><br><span class="line">                <span class="comment">//所有AP在连接之前的Priority是-1 , 并在第一次连接后重置为0</span></span><br><span class="line">                setNetworkPriorityNative(config2.networkId, config.priority);  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    mLastPriority = <span class="number">0</span>;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">// Set to the highest priority and save the configuration.  </span></span><br><span class="line"><span class="comment">// 最后一次连接过的SSID拥有最高的Priority，并且会在自动连接的时候首先考虑它</span></span><br><span class="line"><span class="keyword">if</span> (updatePriorities) &#123;  </span><br><span class="line">    config.priority = ++mLastPriority;  </span><br><span class="line">    <span class="comment">// Priority的值在[0,1000000] , 每次连接都会让这个值 `+1`</span></span><br><span class="line">    setNetworkPriorityNative(config.networkId, config.priority);  </span><br><span class="line">    buildPnoList();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意到了吗，Android对每个不同的AP都有一个独立的<code>networkId</code></p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public int networkId</span><br></pre></td></tr></table></figure>
+
+<p>The ID number that the supplicant uses to identify this network configuration entry. This must be passed as an argument to most calls into the supplicant.</p>
+<p><a href="https://developer.android.com/reference/android/net/wifi/WifiConfiguration" target="_blank" rel="noopener">https://developer.android.com/reference/android/net/wifi/WifiConfiguration</a></p>
+</blockquote>
+<p>Android通过<code>WifiManager</code>来操作WIFI模块，连接的时候也是通过<code>networkId</code>来识别AP的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Connect to a network with the given networkId.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This function is used instead of a enableNetwork(), saveConfiguration() and</span></span><br><span class="line"><span class="comment"> * reconnect()</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> networkId the ID of the network as returned by &#123;<span class="doctag">@link</span> #addNetwork&#125; or &#123;<span class="doctag">@link</span> #getConfiguredNetworks&#125;.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> listener for callbacks on success or failure. Can be null.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalStateException if the WifiManager instance needs to be</span></span><br><span class="line"><span class="comment"> * initialized again</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@hide</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> networkId, ActionListener listener)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (networkId &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Network id cannot be negative"</span>);</span><br><span class="line">    getChannel().sendMessage(CONNECT_NETWORK, networkId, putListener(listener));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>networkId</code>被<code>addNetwrok</code>或者<code>getConfiguredNetworks</code>方法返回，且返回值大于等于<code>0</code></p>
+<p>继续挖一下<code>addNetwork</code>方法，看到如下</p>
+<p>我们构造了一个<code>WifiConfiguration</code>实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> WifiConfiguration <span class="title">CreateWifiInfo</span><span class="params">(String SSID, String Password,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> Type)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>将实例传递给<code>WifiManager</code>对象的<code>addNetwork</code>，此方法将会返回一个全新的<code>networkId</code></p>
+<p>而<code>getConfiguredNetworks</code>则是将所有已配置产生的<code>networkId</code>返回</p>
+<p>我在查阅关于<code>networkId</code>的资料的时候，从这两篇文章得到一些启发</p>
+<blockquote>
+<p>Android 6.0 中的 Wifi 连接</p>
+<p><a href="https://www.cnblogs.com/dongfengweixiao/p/6560438.html" target="_blank" rel="noopener">https://www.cnblogs.com/dongfengweixiao/p/6560438.html</a></p>
+</blockquote>
+<blockquote>
+<p>关于Android Wifi NetworkId的一些理解</p>
+<p><a href="https://blog.csdn.net/mengmengkenanjun/article/details/54287774" target="_blank" rel="noopener">https://blog.csdn.net/mengmengkenanjun/article/details/54287774</a></p>
+<p>  <strong>尤其是这篇的评论</strong></p>
+<p>nowhere___boy: 手机重启wifi列表里面的networkId会重置，从0依次递增，当你调用addNetwork();不管你之前有没有移除该wifi，该wifi的networkId都会+1</p>
+</blockquote>
+<p>手机重启会重置<code>networkId</code></p>
+<p>emm…. 我把<strong>我妈手机</strong>拿来试试，直接连接<code>FAST_432D98</code>, 输入我家的WIFI密码，然后连上了！</p>
+<p>我再<strong>重启</strong>一下<strong>我的手机</strong>，如上操作，也连上了我家的WIFI</p>
+<p><strong>我懂了</strong></p>
+<h2 id="networkId-和-SSID-之间的关系"><a href="#networkId-和-SSID-之间的关系" class="headerlink" title="networkId 和 SSID 之间的关系"></a>networkId 和 SSID 之间的关系</h2><p>我们假设这样一个环境以方便说明</p>
+<ul>
+<li>一台刚刚出厂的Android 9 手机</li>
+<li>我的路由 </li>
+<li>邻居路由</li>
+</ul>
+<p>且我和邻居的路由只发出2.4Ghz的信号，SSID均为 <code>BakaFT</code></p>
+<p>我开机之后，WIFI列表看到了一个叫<code>BakaFT</code>的热点。</p>
+<p>我首先输入了<code>我家的密码</code> ，手机开始进行验证，几秒后连接成功，我可以冲浪了。</p>
+<p>冲浪冲到手机没电之后，路由器突然爆炸，家里跳闸了，手机也没电了，我好郁闷。</p>
+<p>家里来电之后，我首先给手机充电开了机，打开WIFI还是能看到<code>BakaFT</code> ，我输入了<code>邻居的密码</code>, 连上网之后打开淘宝又买了一台路由器。</p>
+<blockquote>
+<p>还记得Windows上那个一个SSID下两个BSSID的情况吗？</p>
+<p>我猜测，安卓同样有这样的处理方法，并且在连接的时候两个路由器都进行了尝试，并最终连接到了密码对应的路由</p>
+</blockquote>
+<p>第二天，我的新路由到了，我头很铁，SSID还是<code>BakaFT</code></p>
+<p>连接上新路由之后，对于我的手机来说，这个<code>SSID</code>和这个AP的<code>networkId</code>就“绑定”在一起，在手机重启前，这个关系不会打破。</p>
+<p>当我选择性地忘记了网络，并尝试输入<code>邻居密码</code> 来连接到<code>邻居网络</code>的时候，发现手机会报错，咋也连不上。但是我重启了手机之后，就可以连接到<code>邻居的网络</code>。</p>
+<h1 id="模拟一下群友的环境"><a href="#模拟一下群友的环境" class="headerlink" title="模拟一下群友的环境"></a>模拟一下群友的环境</h1><p>真有那么巧吗？</p>
+<p>试试吧</p>
+<h2 id="准备-1"><a href="#准备-1" class="headerlink" title="准备"></a>准备</h2><ul>
+<li>我的红米Note7 Pro<ul>
+<li>已经忘记网络，并重启</li>
+</ul>
+</li>
+<li>我的路由 <ul>
+<li>2.4Ghz AP</li>
+<li>SSID = FAST_432D98</li>
+</ul>
+</li>
+<li>邻居路由<ul>
+<li>2.4Ghz AP</li>
+<li>SSID = FAST_432D98</li>
+</ul>
+</li>
+<li>已将我的AP密码与邻居的统一</li>
+</ul>
+<h2 id="假设"><a href="#假设" class="headerlink" title="假设"></a>假设</h2><p>考虑到<code>RSSI</code>可能对连接产生的影响，我会在<code>我家</code>和<code>邻居家附件</code>分别测试。</p>
+<p>为啥是附近？ 我蹭网人家还没算我账呢。。</p>
+<p>根据群友的描述我可以分成两种情况</p>
+<h2 id="手机不重启"><a href="#手机不重启" class="headerlink" title="手机不重启"></a>手机不重启</h2><p>这种情况可以打个实例</p>
+<p>家里和公司的WIFI，名字密码都一样，手机续航可以保证一天不关WIFI。</p>
+<h3 id="首次连接-手动"><a href="#首次连接-手动" class="headerlink" title="首次连接-手动"></a>首次连接-手动</h3><p>首先，我在<code>我家里</code>打开了刚重启的手机的屏幕</p>
+<p>当我打开手机的WIFI列表，我会看到有且只有一个热点叫<code>FAST_432D98</code></p>
+<p>因为我之前没有连接过，所以我必须手动点击它，然后输入<code>唯一密码</code>进行连接</p>
+<p>连接成功后，我会通过访问网关来观察连接到哪一个路由</p>
+<h3 id="四处乱逛"><a href="#四处乱逛" class="headerlink" title="四处乱逛"></a>四处乱逛</h3><p>在两个路由中间跑来跑去，看看有没有网络变动</p>
+<h2 id="手机不断重启"><a href="#手机不断重启" class="headerlink" title="手机不断重启"></a>手机不断重启</h2><h3 id="首次连接-手动-1"><a href="#首次连接-手动-1" class="headerlink" title="首次连接-手动"></a>首次连接-手动</h3><p>首先，我在<code>我家里</code>打开了刚重启的手机的屏幕</p>
+<p>当我打开手机的WIFI列表，我会看到有且只有一个热点叫<code>FAST_432D98</code></p>
+<p>因为我之前没有连接过，所以我必须手动点击它，然后输入<code>唯一密码</code>进行连接</p>
+<p>连接成功后，我会通过访问网关来观察连接到哪一个路由，记录后关机</p>
+<h3 id="二次连接-自动"><a href="#二次连接-自动" class="headerlink" title="二次连接-自动"></a>二次连接-自动</h3><p>这次仍然在<code>我家</code>, 开机，等待自动连接。</p>
+<p>观察网关，记录并关机</p>
+<h3 id="三次连接-自动"><a href="#三次连接-自动" class="headerlink" title="三次连接-自动"></a>三次连接-自动</h3><p>这次去<code>邻居家附近</code>, 开机，等待连接</p>
+<p>观察记录并关机</p>
+<h3 id="四次连接-自动"><a href="#四次连接-自动" class="headerlink" title="四次连接-自动"></a>四次连接-自动</h3><p>回家了开个机再看看</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/05/%E7%90%86%E8%A7%A3Python%E4%B8%AD%E7%9A%84Decorator/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">理解Python中的Decorator</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020
+        <i class="ri-heart-fill heart_icon"></i> BakaFT
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Index</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">Categories</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">Tags</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/projects">Projects</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/oneindex.html">OneIndex</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About me</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="https://lib.baomitu.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/jieyou/lazyload@1.4.2/lazyload.min.js"></script>
+
+<!-- Subtitle -->
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+      startDelay: 0,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+    console.log(err)
+  }
+</script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+    
+  </div>
+</body>
+
+</html>
