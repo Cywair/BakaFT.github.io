@@ -71,7 +71,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">2.2k</span>
+            <span class="post-count">2k</span>
         </span>
     </span>
 
@@ -164,10 +164,11 @@
 <p>我又忘掉了网络，RSSI又蹭蹭涨满了，我就又输入了我家的密码，却连接不上。。</p>
 <p><img src="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/4.jpg" alt="4"></p>
 <h3 id="细思"><a href="#细思" class="headerlink" title="细思"></a>细思</h3><p>看一下安卓的配置文件 <code>/data/misc/wifi/wpa_supplicant.conf</code></p>
+<p>手机没ROOT，拿不到本机的配置，网上随便找了个<code>低版本安卓</code>的配置看一下</p>
 <p>这里给一个 <a href="https://blog.csdn.net/Hh20161314/article/details/84033094" target="_blank" rel="noopener">wpa_supplicant.conf 文件详解</a> 供参考</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##### wpa_supplicant configuration file template #####</span></span><br><span class="line"><span class="string">update_config=1</span></span><br><span class="line"><span class="string">ctrl_interface=DIR=/data/system/wpa_supplicant</span> <span class="string">GROUP=wifi</span></span><br><span class="line"><span class="string">eapol_version=1</span></span><br><span class="line"><span class="string">ap_scan=1</span></span><br><span class="line"><span class="string">fast_reauth=1</span></span><br><span class="line"><span class="string">network=&#123;</span></span><br><span class="line"> <span class="string">ssid="818***"</span></span><br><span class="line"> <span class="string">psk="*****"</span></span><br><span class="line"> <span class="string">key_mgmt=WPA-PSK</span></span><br><span class="line"> <span class="string">priority=241</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="string">network=&#123;</span></span><br><span class="line">	<span class="string">ssid="second</span> <span class="string">ssid"</span></span><br><span class="line">	<span class="string">psk="very</span> <span class="string">secret</span> <span class="string">passphrase"</span></span><br><span class="line">	<span class="string">key_mgmt=WPA-PSK</span></span><br><span class="line">	<span class="string">priority=2</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">....</span></span><br></pre></td></tr></table></figure>
 
-<p>只要AP的SSID和配置文件里已保存的符合，那么系统就会认为你已经保存该AP的密码，但是这样其实会产生问题，下面会解释到。</p>
+<p>只要AP的SSID和配置文件里已保存的符合，那么系统就会认为你已经保存该AP的密码。</p>
 <p>我们还可以注意到，这里每个SSID下面有一个<code>priority</code> ，这是优先级。</p>
 <blockquote>
 <p>课外小知识，这个文章涉及到了<code>priority</code>的应用</p>
@@ -175,10 +176,13 @@
 <p><a href="https://blog.csdn.net/kris_fei/article/details/74581441" target="_blank" rel="noopener">https://blog.csdn.net/kris_fei/article/details/74581441</a></p>
 </blockquote>
 <p>但是这个优先级是基于SSID的，我们的问题前提就是SSID相同啊？</p>
+<p>而且Priority这个特性在API 26就被取消了..</p>
+<p><img src="/2020/06/07/Android%E5%92%8CWindows%E5%AF%B9%E5%90%8C%E5%90%8DWifi%E7%9A%84%E5%A4%84%E7%90%86/5.png" alt="5"></p>
 <p>没得了。</p>
 <h3 id="networkId"><a href="#networkId" class="headerlink" title="networkId"></a>networkId</h3><p>我们看一下Android Q (API 29) 之前，系统对这个优先级的处理方式</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reset the priority of each network at start or if it goes too high.  </span></span><br><span class="line"><span class="keyword">if</span> (mLastPriority == -<span class="number">1</span> || mLastPriority &gt; <span class="number">1000000</span>) &#123;  </span><br><span class="line">    <span class="keyword">for</span>(WifiConfiguration config2 : mConfiguredNetworks.values()) &#123;  </span><br><span class="line">        <span class="keyword">if</span> (updatePriorities) &#123;  </span><br><span class="line">            <span class="keyword">if</span> (config2.networkId != INVALID_NETWORK_ID) &#123;  </span><br><span class="line">                config2.priority = <span class="number">0</span>;  </span><br><span class="line">                <span class="comment">//所有AP在连接之前的Priority是-1 , 并在第一次连接后重置为0</span></span><br><span class="line">                setNetworkPriorityNative(config2.networkId, config.priority);  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">    mLastPriority = <span class="number">0</span>;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">// Set to the highest priority and save the configuration.  </span></span><br><span class="line"><span class="comment">// 最后一次连接过的SSID拥有最高的Priority，并且会在自动连接的时候首先考虑它</span></span><br><span class="line"><span class="keyword">if</span> (updatePriorities) &#123;  </span><br><span class="line">    config.priority = ++mLastPriority;  </span><br><span class="line">    <span class="comment">// Priority的值在[0,1000000] , 每次连接都会让这个值 `+1`</span></span><br><span class="line">    setNetworkPriorityNative(config.networkId, config.priority);  </span><br><span class="line">    buildPnoList();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>虽然现在Priority已经没有用了，但是</p>
 <p>注意到了吗，Android对每个不同的AP都有一个独立的<code>networkId</code></p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public int networkId</span><br></pre></td></tr></table></figure>
@@ -186,16 +190,19 @@
 <p>The ID number that the supplicant uses to identify this network configuration entry. This must be passed as an argument to most calls into the supplicant.</p>
 <p><a href="https://developer.android.com/reference/android/net/wifi/WifiConfiguration" target="_blank" rel="noopener">https://developer.android.com/reference/android/net/wifi/WifiConfiguration</a></p>
 </blockquote>
-<p>Android通过<code>WifiManager</code>来操作WIFI模块，连接的时候也是通过<code>networkId</code>来识别AP的</p>
+<p>这个特性在API 29(Android 10) 被取消，而我的手机是Android 9</p>
+<p>Android通过<code>WifiManager</code>来操作WIFI模块，连接的时候也是通过<code>networkId</code>来辨别AP的</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Connect to a network with the given networkId.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This function is used instead of a enableNetwork(), saveConfiguration() and</span></span><br><span class="line"><span class="comment"> * reconnect()</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> networkId the ID of the network as returned by &#123;<span class="doctag">@link</span> #addNetwork&#125; or &#123;<span class="doctag">@link</span> #getConfiguredNetworks&#125;.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> listener for callbacks on success or failure. Can be null.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalStateException if the WifiManager instance needs to be</span></span><br><span class="line"><span class="comment"> * initialized again</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@hide</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> networkId, ActionListener listener)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (networkId &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Network id cannot be negative"</span>);</span><br><span class="line">    getChannel().sendMessage(CONNECT_NETWORK, networkId, putListener(listener));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>可以看到<code>networkId</code>被<code>addNetwrok</code>或者<code>getConfiguredNetworks</code>方法返回，且返回值大于等于<code>0</code></p>
 <p>继续挖一下<code>addNetwork</code>方法，看到如下</p>
-<p>我们构造了一个<code>WifiConfiguration</code>实例</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> WifiConfiguration <span class="title">CreateWifiInfo</span><span class="params">(String SSID, String Password,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> Type)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我们构造一个<code>WifiConfiguration</code>实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> WifiConfiguration <span class="title">CreateWifiInfo</span><span class="params">(String SSID, String Password,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> Type)</span>   </span></span><br></pre></td></tr></table></figure>
 
 <p>将实例传递给<code>WifiManager</code>对象的<code>addNetwork</code>，此方法将会返回一个全新的<code>networkId</code></p>
 <p>而<code>getConfiguredNetworks</code>则是将所有已配置产生的<code>networkId</code>返回</p>
+</blockquote>
 <p>我在查阅关于<code>networkId</code>的资料的时候，从这两篇文章得到一些启发</p>
 <blockquote>
 <p>Android 6.0 中的 Wifi 连接</p>
@@ -207,31 +214,30 @@
 <p>  <strong>尤其是这篇的评论</strong></p>
 <p>nowhere___boy: 手机重启wifi列表里面的networkId会重置，从0依次递增，当你调用addNetwork();不管你之前有没有移除该wifi，该wifi的networkId都会+1</p>
 </blockquote>
-<p>手机重启会重置<code>networkId</code></p>
+<p>手机重启会重置<code>networkId</code> ？</p>
 <p>emm…. 我把<strong>我妈手机</strong>拿来试试，直接连接<code>FAST_432D98</code>, 输入我家的WIFI密码，然后连上了！</p>
 <p>我再<strong>重启</strong>一下<strong>我的手机</strong>，如上操作，也连上了我家的WIFI</p>
-<p><strong>我懂了</strong></p>
-<h2 id="networkId-和-SSID-之间的关系"><a href="#networkId-和-SSID-之间的关系" class="headerlink" title="networkId 和 SSID 之间的关系"></a>networkId 和 SSID 之间的关系</h2><p>我们假设这样一个环境以方便说明</p>
-<ul>
-<li>一台刚刚出厂的Android 9 手机</li>
-<li>我的路由 </li>
-<li>邻居路由</li>
-</ul>
-<p>且我和邻居的路由只发出2.4Ghz的信号，SSID均为 <code>BakaFT</code></p>
-<p>我开机之后，WIFI列表看到了一个叫<code>BakaFT</code>的热点。</p>
-<p>我首先输入了<code>我家的密码</code> ，手机开始进行验证，几秒后连接成功，我可以冲浪了。</p>
-<p>冲浪冲到手机没电之后，路由器突然爆炸，家里跳闸了，手机也没电了，我好郁闷。</p>
-<p>家里来电之后，我首先给手机充电开了机，打开WIFI还是能看到<code>BakaFT</code> ，我输入了<code>邻居的密码</code>, 连上网之后打开淘宝又买了一台路由器。</p>
-<blockquote>
-<p>还记得Windows上那个一个SSID下两个BSSID的情况吗？</p>
+<p>看样子的确<code>手机重启</code>的确会对这个<code>networkId</code>有点影响，但并不是评论里所描述的那样</p>
+<p>经过我自己的测试，我看到的效果是这样的，大概是因为Android 9 有一些变化吧</p>
+<p>我在<code>WLAN Config</code>页面可以看到所有的<code>Configured networks</code></p>
+<p>系统会从0开始为你每次调用<code>addNetwork()</code>添加的SSID分配一个<code>ID</code>, 每次调用都会取<code>ID+1</code> 分配给新的SSID</p>
+<p>如果SSID已经保存过，则<code>ID</code>直接+1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;addNetwork(BakaFT)  </span><br><span class="line">BakaFT:0</span><br><span class="line">&gt;&gt;&gt;addNetwork(BakaFT)</span><br><span class="line">BakaFT:1</span><br><span class="line">&gt;&gt;&gt;addNetwork(BakaFT_5G)</span><br><span class="line">BakaFT:1, BakaFT_5G:2</span><br><span class="line">&gt;&gt;&gt;addNetwork(BakaFT_5G)</span><br><span class="line">BakaFT:1, BakaFT_5G:3</span><br></pre></td></tr></table></figure>
+
+<p>而且这个<strong>记录不会因为手机的重启而清除</strong>，每次打开WIFI后都能看到。</p>
+<p>emmm….</p>
+<h2 id="一个较为合理的解释"><a href="#一个较为合理的解释" class="headerlink" title="一个较为合理的解释"></a>一个较为合理的解释</h2><p>还记得Windows上那个一个SSID下两个BSSID的情况吗？</p>
 <p>我猜测，安卓同样有这样的处理方法，并且在连接的时候两个路由器都进行了尝试，并最终连接到了密码对应的路由</p>
-</blockquote>
-<p>第二天，我的新路由到了，我头很铁，SSID还是<code>BakaFT</code></p>
-<p>连接上新路由之后，对于我的手机来说，这个<code>SSID</code>和这个AP的<code>networkId</code>就“绑定”在一起，在手机重启前，这个关系不会打破。</p>
-<p>当我选择性地忘记了网络，并尝试输入<code>邻居密码</code> 来连接到<code>邻居网络</code>的时候，发现手机会报错，咋也连不上。但是我重启了手机之后，就可以连接到<code>邻居的网络</code>。</p>
-<h1 id="模拟一下群友的环境"><a href="#模拟一下群友的环境" class="headerlink" title="模拟一下群友的环境"></a>模拟一下群友的环境</h1><p>真有那么巧吗？</p>
-<p>试试吧</p>
-<h2 id="准备-1"><a href="#准备-1" class="headerlink" title="准备"></a>准备</h2><ul>
+<p>连接上<code>我家的</code>路由后，这个<code>SSID</code>就和这个路由的<code>BSSID</code>绑定在了一起，在重启之前这个关系不会被打破，且无法改变。并且这套<code>SSID</code>+<code>BSSID</code>和一个新的<code>networkId</code>以及其他必要信息共同组成了一个<code>Configured network</code> (就像一个字典)</p>
+<p>如果再忘记网络</p>
+<ul>
+<li>然后再输入<code>邻居的</code>密码，系统根据<code>SSID</code>查询到了<code>我的路由的BSSID</code>, 却使用了<code>邻居的密码</code>去请求建立连接，这肯定会失败。</li>
+<li>然后再输入<code>我的</code>密码，系统根据<code>SSID</code>查询到了<code>我的路由的BSSID</code>, 使用了正确的密码，成功建立了连接，并刷新<code>networkId</code></li>
+</ul>
+<h1 id="回到群友的问题"><a href="#回到群友的问题" class="headerlink" title="回到群友的问题"></a>回到群友的问题</h1><h2 id="推理一波"><a href="#推理一波" class="headerlink" title="推理一波"></a>推理一波</h2><p>群友的意思就是，两个AP的信号覆盖范围有交集，而群友就正好在这个交集范围内</p>
+<p>他问的是<code>自动连接</code>，按照前面的设想的话，这个自动连接对象取决于<code>第一次连接</code></p>
+<p>第一次连接的时候，两个同名同密的AP, 会自动连接到哪一个，这个直接就决定了答案</p>
+<h2 id="模拟一下群友的环境，同名同密"><a href="#模拟一下群友的环境，同名同密" class="headerlink" title="模拟一下群友的环境，同名同密"></a>模拟一下群友的环境，同名同密</h2><h3 id="准备-1"><a href="#准备-1" class="headerlink" title="准备"></a>准备</h3><ul>
 <li>我的红米Note7 Pro<ul>
 <li>已经忘记网络，并重启</li>
 </ul>
@@ -248,25 +254,7 @@
 </li>
 <li>已将我的AP密码与邻居的统一</li>
 </ul>
-<h2 id="假设"><a href="#假设" class="headerlink" title="假设"></a>假设</h2><p>考虑到<code>RSSI</code>可能对连接产生的影响，我会在<code>我家</code>和<code>邻居家附件</code>分别测试。</p>
-<p>为啥是附近？ 我蹭网人家还没算我账呢。。</p>
-<p>根据群友的描述我可以分成两种情况</p>
-<h2 id="手机不重启"><a href="#手机不重启" class="headerlink" title="手机不重启"></a>手机不重启</h2><p>这种情况可以打个实例</p>
-<p>家里和公司的WIFI，名字密码都一样，手机续航可以保证一天不关WIFI。</p>
-<h3 id="首次连接-手动"><a href="#首次连接-手动" class="headerlink" title="首次连接-手动"></a>首次连接-手动</h3><p>首先，我在<code>我家里</code>打开了刚重启的手机的屏幕</p>
-<p>当我打开手机的WIFI列表，我会看到有且只有一个热点叫<code>FAST_432D98</code></p>
-<p>因为我之前没有连接过，所以我必须手动点击它，然后输入<code>唯一密码</code>进行连接</p>
-<p>连接成功后，我会通过访问网关来观察连接到哪一个路由</p>
-<h3 id="四处乱逛"><a href="#四处乱逛" class="headerlink" title="四处乱逛"></a>四处乱逛</h3><p>在两个路由中间跑来跑去，看看有没有网络变动</p>
-<h2 id="手机不断重启"><a href="#手机不断重启" class="headerlink" title="手机不断重启"></a>手机不断重启</h2><h3 id="首次连接-手动-1"><a href="#首次连接-手动-1" class="headerlink" title="首次连接-手动"></a>首次连接-手动</h3><p>首先，我在<code>我家里</code>打开了刚重启的手机的屏幕</p>
-<p>当我打开手机的WIFI列表，我会看到有且只有一个热点叫<code>FAST_432D98</code></p>
-<p>因为我之前没有连接过，所以我必须手动点击它，然后输入<code>唯一密码</code>进行连接</p>
-<p>连接成功后，我会通过访问网关来观察连接到哪一个路由，记录后关机</p>
-<h3 id="二次连接-自动"><a href="#二次连接-自动" class="headerlink" title="二次连接-自动"></a>二次连接-自动</h3><p>这次仍然在<code>我家</code>, 开机，等待自动连接。</p>
-<p>观察网关，记录并关机</p>
-<h3 id="三次连接-自动"><a href="#三次连接-自动" class="headerlink" title="三次连接-自动"></a>三次连接-自动</h3><p>这次去<code>邻居家附近</code>, 开机，等待连接</p>
-<p>观察记录并关机</p>
-<h3 id="四次连接-自动"><a href="#四次连接-自动" class="headerlink" title="四次连接-自动"></a>四次连接-自动</h3><p>回家了开个机再看看</p>
+<p>鸽了</p>
 
       
       <!-- reward -->
