@@ -71,7 +71,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">2k</span>
+            <span class="post-count">2.1k</span>
         </span>
     </span>
 
@@ -234,6 +234,13 @@
 <li>然后再输入<code>邻居的</code>密码，系统根据<code>SSID</code>查询到了<code>我的路由的BSSID</code>, 却使用了<code>邻居的密码</code>去请求建立连接，这肯定会失败。</li>
 <li>然后再输入<code>我的</code>密码，系统根据<code>SSID</code>查询到了<code>我的路由的BSSID</code>, 使用了正确的密码，成功建立了连接，并刷新<code>networkId</code></li>
 </ul>
+<p>这个解释的适用性可能仅仅是我设定的环境，毕竟原先的题设条件几乎是0</p>
+<p>这里提供一个参考</p>
+<blockquote>
+<p>Android P WiFi自动连接评分机制</p>
+<p><a href="https://blog.csdn.net/qq_43804080/article/details/105491112" target="_blank" rel="noopener">https://blog.csdn.net/qq_43804080/article/details/105491112</a></p>
+<p><del>不会直接把上面的全推翻了吧</del></p>
+</blockquote>
 <h1 id="回到群友的问题"><a href="#回到群友的问题" class="headerlink" title="回到群友的问题"></a>回到群友的问题</h1><h2 id="推理一波"><a href="#推理一波" class="headerlink" title="推理一波"></a>推理一波</h2><p>群友的意思就是，两个AP的信号覆盖范围有交集，而群友就正好在这个交集范围内</p>
 <p>他问的是<code>自动连接</code>，按照前面的设想的话，这个自动连接对象取决于<code>第一次连接</code></p>
 <p>第一次连接的时候，两个同名同密的AP, 会连接到哪一个，这个直接就决定了答案</p>
