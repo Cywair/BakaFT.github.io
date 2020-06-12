@@ -71,7 +71,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">949</span>
+            <span class="post-count">1k</span>
         </span>
     </span>
 
@@ -109,10 +109,14 @@
 <h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>学堂在线的答案提交通过API实现</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;next.xuetangx.com&#x2F;api&#x2F;v1&#x2F;lms&#x2F;exercise&#x2F;problem_apply&#x2F;</span><br></pre></td></tr></table></figure>
 
-<p>再结合之前的一些东西，就可以通过模拟发送POST请求来实现自动答题</p>
+<p>每一次提交题目的时候，都会朝这个URL发送一个<code>POST</code>请求来“交卷”</p>
+<p><code>Request payload</code>中携带了提交的内容，这些都是可以获取到的，包括答案</p>
+<p>具体的获取方法参考之前的<a href="https://alphaft.me/tags/%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF/">一些文章</a></p>
+<p><img src="/2020/06/09/Python%E5%AE%9E%E7%8E%B0%E5%AD%A6%E5%A0%82%E5%9C%A8%E7%BA%BF%E8%87%AA%E5%8A%A8%E7%AD%94%E9%A2%98/1.png" alt="1"></p>
+<p>对于每道题都实现这么一个过程</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">获取答案 → 整理答案 → 发送制作好的请求</span><br></pre></td></tr></table></figure>
 
-<p>即可实现一次答题</p>
+<p>就可以快速刷题了</p>
 <h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h2 id="引用库"><a href="#引用库" class="headerlink" title="引用库"></a>引用库</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> uncurl</span><br><span class="line"><span class="keyword">import</span> time</span><br></pre></td></tr></table></figure>
 
 <h2 id="初始化两个空列表待用"><a href="#初始化两个空列表待用" class="headerlink" title="初始化两个空列表待用"></a>初始化两个空列表待用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">courses_dicts &#x3D; [] #a temp list to store course_info dicts</span><br><span class="line">leaf_dicts &#x3D; []</span><br></pre></td></tr></table></figure>
