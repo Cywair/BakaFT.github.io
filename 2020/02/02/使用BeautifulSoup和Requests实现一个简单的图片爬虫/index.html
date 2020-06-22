@@ -155,11 +155,10 @@
 <p>再写下一个循环</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for each in imgs:    #循环依次选定imgs列表中的每一个img标签</span><br><span class="line">    imgurl &#x3D; each[&#39;src&#39;]  #循环提取img标签中的src值并赋给imgurl</span><br><span class="line">    imgsource &#x3D; requests.get(imgurl, headers&#x3D;headers).content  #通过requests.get的方法获得图片的二进制内容</span><br><span class="line">    filename &#x3D; os.path.basename(imgurl)  #定义一个变量，储存文件的原名</span><br><span class="line">    f &#x3D; open(filename, &#39;wb&#39;)  #新建一个名字为filename的文件，通过二进制方式写入</span><br><span class="line">    f.write(imgsource)  #将imgsource写入文件中</span><br><span class="line">    f.close() #关闭文件，解除占用</span><br></pre></td></tr></table></figure>
 
-<p>把程序块拼起来，跑一下试试</p>
+<p>把程序块拼起来，跑一下试试。</p>
 <p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/4.png" alt="4"></p>
 <p>由于福利吧直接把图扔到微博图床再贴到文章里，所以文件名都比较不规则。</p>
 <p>如果你想的话，可以采用 数字+扩展名 的方式进行保存。</p>
-<p><img src="/2020/02/02/%E4%BD%BF%E7%94%A8BeautifulSoup%E5%92%8CRequests%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/5.png" alt="5"></p>
 
       
       <!-- reward -->
