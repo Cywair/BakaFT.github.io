@@ -71,7 +71,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.3k</span>
+            <span class="post-count">1.5k</span>
         </span>
     </span>
 
@@ -80,7 +80,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">5 min</span>
+            <span class="post-count">6 min</span>
         </span>
     </span>
 </div>
@@ -150,7 +150,8 @@
 </blockquote>
 <p>那么，我们访问 <a href="https://127.0.0.1:27491/riotclient/command-line-args![3](LeagueClient通信-0-如何让熊孩子玩不了LOL/3.png)" target="_blank" rel="noopener">https://127.0.0.1:27491/riotclient/command-line-args![3](LeagueClient通信-0-如何让熊孩子玩不了LOL/3.png)</a></p>
 <p>于是我们就得到了目前LCU的运行参数，可以看到这个和任务管理器里的内容是一样的。<img src="/2020/06/23/LeagueClient%E9%80%9A%E4%BF%A1-0-%E5%A6%82%E4%BD%95%E8%AE%A9%E7%86%8A%E5%AD%A9%E5%AD%90%E7%8E%A9%E4%B8%8D%E4%BA%86LOL/4.png" alt="4"></p>
-<h1 id="建立游戏房间"><a href="#建立游戏房间" class="headerlink" title="建立游戏房间"></a>建立游戏房间</h1><p>在一个非官方的API文档中，提及到了LCU客户端建立房间的方法</p>
+<h1 id="建立游戏房间"><a href="#建立游戏房间" class="headerlink" title="建立游戏房间"></a>建立游戏房间</h1><p>上面只是提到了<code>GET</code>方法，而很多操作需要用到<code>POST</code>方法，甚至其<code>PUT</code>,<code>DELETE</code>等</p>
+<p>在一个非官方的API文档中，提及到了LCU客户端建立房间的方法</p>
 <p><a href="https://riot-api-libraries.readthedocs.io/en/latest/lcu.html#rift-explorer" target="_blank" rel="noopener">https://riot-api-libraries.readthedocs.io/en/latest/lcu.html#rift-explorer</a></p>
 <p>其实创建房间调用了<code>POST /lol-lobby/v2/lobby</code>这个接口</p>
 <blockquote>
@@ -161,6 +162,18 @@
 <p><a href="http://static.developer.riotgames.com/docs/lol/queues.json" target="_blank" rel="noopener">http://static.developer.riotgames.com/docs/lol/queues.json</a></p>
 <p>开头提到的5V5训练模式，其实就是把这里的数据完善了一下，具体参数可以参考官方文档</p>
 <p><img src="/2020/06/23/LeagueClient%E9%80%9A%E4%BF%A1-0-%E5%A6%82%E4%BD%95%E8%AE%A9%E7%86%8A%E5%AD%A9%E5%AD%90%E7%8E%A9%E4%B8%8D%E4%BA%86LOL/5.png" alt="图片来自于工具作者"></p>
+<p>浏览器只能<code>GET</code>，那怎么发送这种请求？发送的时候又要如何验证身份？</p>
+<p>先说一下如何直接在URL中解决<code>Http authorization</code>:</p>
+<p>访问的时候，在URL中加入 <code>username:password</code>的组合字符串，并用<code>@</code>连接字符串和<code>主机地址</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;riot:oL1ABkjI0LuUpP4ib55QAw@127.0.0.1:27491</span><br></pre></td></tr></table></figure>
+
+<p>不论是<code>GET</code>还是<code>POST</code>，都可以这样实现携带身份访问，无需验证</p>
+<p>那怎么发送<code>POST</code>请求？</p>
+<p>以Python为例，有一个<code>Requests</code>库很适合用来进行HTTP通信，支持多种HTTP方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request &#x3D; request.post(url)</span><br></pre></td></tr></table></figure>
+
+<p>这就是一个最简单的POST请求</p>
+<p>其他语言也有各自类似的HTTP库，可以自行查阅实现</p>
 <h1 id="回归正题"><a href="#回归正题" class="headerlink" title="回归正题"></a>回归正题</h1><p>跑的有点远了..那么回归标题，如何让熊孩子玩不了LOL</p>
 <p>我们可以在之前的那个网站上查到这个接口：</p>
 <blockquote>
@@ -170,7 +183,7 @@
 <p>最小化LCU客户端窗口，但并不结束相关进程</p>
 </blockquote>
 <p>这里给出一个Python写法:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">request = requests.post(<span class="string">'https://127.0.0.1:27491/riotclient/ux-minimize'</span>,verify=<span class="literal">False</span>)</span><br><span class="line">print(request)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">request = requests.post(<span class="string">'https://riot:oL1ABkjI0LuUpP4ib55QAw@127.0.0.1:27491/riotclient/ux-minimize'</span>,verify=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 因为证书问题，这里需要关掉SSL验证，就是verify=False. 执行后会出现一个警告，可无视</span></span><br><span class="line">print(request)</span><br></pre></td></tr></table></figure>
 
 <p>执行之后会看到</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Response [204]&gt;</span><br></pre></td></tr></table></figure>
