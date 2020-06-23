@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-Hans">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    长江大学教务处模拟登录及成绩缓存 |  BakaFT&#39;s blog
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="post-长江大学教务处模拟登录及成绩缓存" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  长江大学教务处模拟登录及成绩缓存
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/06/23/%E9%95%BF%E6%B1%9F%E5%A4%A7%E5%AD%A6%E6%95%99%E5%8A%A1%E5%A4%84%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95%E5%8F%8A%E6%88%90%E7%BB%A9%E7%BC%93%E5%AD%98/" class="article-date">
+  <time datetime="2020-06-23T06:01:35.000Z" itemprop="datePublished">2020-06-23</time>
+</a>
+      
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <p><strong>代码写在5/18，现在补发一下分析吧</strong></p>
+<p><strong>当时写的代码乱糟糟的。。凑合看看</strong></p>
+<h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>来到长大一段时间，我在酷安上偶然发现了一个叫长大助手的APP，了解发现，这个是17届的机械系学长业余时间用Java写的</p>
+<p>仓库地址: <a href="https://github.com/xiaoyvyv/YangtzeuApp" target="_blank" rel="noopener">https://github.com/xiaoyvyv/YangtzeuApp</a></p>
+<p>核心部分开源，UI设计简介规范，我很喜欢这个APP，也希望自己能够实现一个类似的东西</p>
+<p>当然，它也有我觉得不好的地方，很多功能是没有必要的(比如社交设计)，带来了不必要的服务器资源消耗，也带来了广告。</p>
+<p>东西可以去掉，数据储存可以采用更好的方式，比如GitHub+JSDelivr+Cloudflare的解决方案。</p>
+<p>这都催生着我重写/仿写这样一个东西的想法。</p>
+<p>也许是B/S，也许是C/S，或者是Electron那样的”结合体”，或者ReactNative，我没想好，但是想先用Python做个大概的实现。</p>
+<h1 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h1><p>长大的教务系统…一言难尽。</p>
+<p>大量的静态资源保存在服务器本地而不采用公开CDN，对服务器而言，极大浪费了不必要的流量与资源，这也是高并发情况(比如选课)下为什么教务处炸得这么快。对客户端而言，这速度实在是太慢了。。</p>
+<p>我觉得长大助手本身设计缓存部分教务数据不是没道理的，减少教务处服务器压力，也能保证在教务处爆炸的情况下继续提供部分功能，比如课表。</p>
+<p>总之，从教务处将在线数据缓存到本地是很有必要的。</p>
+<p>而在这一切之前，必须实现模拟登录。</p>
+<h2 id="密码加密逻辑分析"><a href="#密码加密逻辑分析" class="headerlink" title="密码加密逻辑分析"></a>密码加密逻辑分析</h2><p>首先，我使用<code>username:123456</code>的组合来尝试登陆一下，看看发生了什么</p>
+<p>浏览器向<code>http://jwc3.yangtzeu.edu.cn/eams/login.action</code>发送了一个POST请求，并携带了部分数据</p>
+<p>curl如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://jwc3.yangtzeu.edu.cn/eams/login.action'</span> \</span><br><span class="line">  -H <span class="string">'Connection: keep-alive'</span> \</span><br><span class="line">  -H <span class="string">'Pragma: no-cache'</span> \</span><br><span class="line">  -H <span class="string">'Cache-Control: no-cache'</span> \</span><br><span class="line">  -H <span class="string">'Origin: http://jwc3.yangtzeu.edu.cn'</span> \</span><br><span class="line">  -H <span class="string">'Upgrade-Insecure-Requests: 1'</span> \</span><br><span class="line">  -H <span class="string">'DNT: 1'</span> \</span><br><span class="line">  -H <span class="string">'Content-Type: application/x-www-form-urlencoded'</span> \</span><br><span class="line">  -H <span class="string">'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36 Edg/83.0.478.54'</span> \</span><br><span class="line">  -H <span class="string">'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'</span> \</span><br><span class="line">  -H <span class="string">'Referer: http://jwc3.yangtzeu.edu.cn/eams/login.action;jsessionid=D01C405C26C60EC0698403318EB899CD'</span> \</span><br><span class="line">  -H <span class="string">'Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7'</span> \</span><br><span class="line">  -H <span class="string">'Cookie: semester.id=89; JSESSIONID=D01C405C26C60EC0698403318EB899CD; GSESSIONID=D01C405C26C60EC0698403318EB899CD; adc-ck-jwxt_pools=IFALAKAK'</span> \</span><br><span class="line">  --data-raw <span class="string">'username=username&amp;password=8a7f8c7e50374e7848478e3c50c357c94b4f54b9&amp;encodedPassword=&amp;session_locale=zh_CN'</span> \</span><br><span class="line">  --compressed \</span><br><span class="line">  --insecure</span><br></pre></td></tr></table></figure>
+
+<p>标准的HTTP请求头，以及关键的用户信息数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">data = &#123;</span><br><span class="line">  <span class="string">'username'</span>: <span class="string">'username^'</span>,</span><br><span class="line">  <span class="string">'password'</span>: <span class="string">'8a7f8c7e50374e7848478e3c50c357c94b4f54b9^'</span>,</span><br><span class="line">  <span class="string">'encodedPassword'</span>: <span class="string">'^'</span>,</span><br><span class="line">  <span class="string">'session_locale'</span>: <span class="string">'zh_CN'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，用户名未加密，密码被加密了。吐槽一下，<code>encodedPassword</code>不应该才是加密后的密码该存的位置吗…</p>
+<p>那么到这里就卡了一下，这咋加密的？</p>
+<p>看一下Chrome的Sources选项卡…</p>
+<p><code>http://jwc3.yangtzeu.edu.cn/eams/static/scripts/sha1.js</code> , 看到这个你有什么反应？</p>
+<p>当然是加密方式了，采用了sha1加密</p>
+<p>再看看文件内容开头</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">CryptoJS v3.1.2</span><br><span class="line">code.google.com&#x2F;p&#x2F;crypto-js</span><br><span class="line">(c) 2009-2013 by Jeff Mott. All rights reserved.</span><br><span class="line">code.google.com&#x2F;p&#x2F;crypto-js&#x2F;wiki&#x2F;License</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>Google的CryptoJS, 经常用于前端加密，支持多种加密方式，这里命名为sha1,很明显就是调用了其中的SHA1加密方法。</p>
+<p>那么，我们去登陆页面看看有没有和CryptoJS相关的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view-source:http:&#x2F;&#x2F;jwc3.yangtzeu.edu.cn&#x2F;eams&#x2F;login.action</span><br></pre></td></tr></table></figure>
+
+<p>搜索发现，页脚部分插入了一个js，并且和加密有关,此处摘取关键部分</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> form  = <span class="built_in">document</span>.loginForm;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">checkLogin</span>(<span class="params">form</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!form[<span class="string">'username'</span>].value)&#123;</span><br><span class="line">			alert(<span class="string">"用户名称不能为空"</span>);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(!form[<span class="string">'password'</span>].value)&#123;</span><br><span class="line">			alert(<span class="string">"密码不能为空"</span>);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">    	form[<span class="string">'password'</span>].value = CryptoJS.SHA1(<span class="string">'d344682a-7aa4-45d4-b584-70bf2810bec1-'</span> + form[<span class="string">'password'</span>].value);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(<span class="string">"zh"</span>.indexOf(<span class="string">"en"</span>)!=<span class="number">-1</span>)&#123;<span class="built_in">document</span>.getElementById(<span class="string">'local_en'</span>).checked=<span class="literal">true</span>;&#125;</span><br><span class="line">	<span class="keyword">var</span> username=beangle.cookie.get(<span class="string">"username"</span>);</span><br><span class="line">	<span class="keyword">if</span>(<span class="literal">null</span>!=username)&#123; form[<span class="string">'username'</span>].value=username;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">form[<span class="string">'password'</span>].value = CryptoJS.SHA1(<span class="string">'d344682a-7aa4-45d4-b584-70bf2810bec1-'</span> + form[<span class="string">'password'</span>].value);</span><br></pre></td></tr></table></figure>
+
+<p>就这句话，调用了CryptoJS的SHA1加密方法。但是这写法我也挺无语的。。</p>
+<p>页面每次会随机生成一个格式为8-4-4-4-12的UUID，并将UUID和<code>-password</code>拼接成一个新的字符串，然后对这个字符串进行SHA1加密，得到的结果是一个哈希值，并且将这个哈希赋给<code>password</code></p>
+<p>那你还要<code>encodedpassword</code>干啥。。</p>
+<h2 id="保持登陆状态"><a href="#保持登陆状态" class="headerlink" title="保持登陆状态"></a>保持登陆状态</h2><p>HTTP是无连接，无状态的协议，需要Session或者Cookie去保持用户状态</p>
+<p>Python的Request库中的<code>session</code>类可以做到这样的效果，这个东西的作用，就是保持我们的登陆状态，也就是”不关浏览器”</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个Session会话</span></span><br><span class="line">login_session = requests.session() </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_str_sha1_secret_str</span><span class="params">(res:str)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    输入一个字符串，返回一个SHA1加密后的哈希值</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    sha = hashlib.sha1(res.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">    encrypts = sha.hexdigest()</span><br><span class="line">    <span class="keyword">return</span> encrypts</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    通过函数实现登录过程</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    username = <span class="string">'bakaft'</span></span><br><span class="line">    password = <span class="string">'passwordtest'</span></span><br><span class="line">    login_url = <span class="string">'http://jwc3.yangtzeu.edu.cn/eams/login.action'</span></span><br><span class="line">    <span class="comment"># 获取当前session下的登陆页面源码</span></span><br><span class="line">    login_page_get = login_session.get(login_url,headers=headers)</span><br><span class="line">    login_page_soup = BeautifulSoup(login_page_get.text, <span class="string">'html.parser'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_password_sha1</span><span class="params">(password)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        利用BS4和正则表达式提取页面下的UUID与密码拼接字符串，并调用第一个函数来加密这个字符串</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        script = login_page_soup.find_all(<span class="string">'script'</span>, &#123;<span class="string">'type'</span>: <span class="string">'text/javascript'</span>&#125;)</span><br><span class="line">        raw = script[<span class="number">4</span>]</span><br><span class="line">        text = raw.text</span><br><span class="line">        pattern = <span class="string">r'CryptoJS.SHA1[(]\'(.*?)\''</span></span><br><span class="line">        searchObj = re.search(pattern, text)</span><br><span class="line">        <span class="keyword">if</span> searchObj:</span><br><span class="line">            login_key = re.search(<span class="string">"'(.*)'"</span>, searchObj.group()).group().replace(<span class="string">"'"</span>, <span class="string">''</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'获取Login Key失败'</span>)</span><br><span class="line">        pwmix = get_str_sha1_secret_str(login_key + password)</span><br><span class="line">        <span class="keyword">return</span> pwmix</span><br><span class="line">    password_sha1 = get_password_sha1(password)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 登陆表单</span></span><br><span class="line">    data = &#123;</span><br><span class="line">      <span class="string">'username'</span>: username,</span><br><span class="line">      <span class="string">'password'</span>: password_sha1,</span><br><span class="line">      <span class="string">'encodedPassword'</span>: <span class="string">''</span>,</span><br><span class="line">      <span class="string">'session_locale'</span>: <span class="string">'zh_CN'</span></span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment"># 构造登录POST请求</span></span><br><span class="line">    login_page_post = login_session.post(<span class="string">'http://jwc3.yangtzeu.edu.cn/eams/login.action'</span>,data=data ,verify=<span class="literal">False</span>)</span><br><span class="line">    <span class="comment"># 打印登录返回的页面</span></span><br><span class="line">    print(login_page_post.text)</span><br></pre></td></tr></table></figure>
+
+<h1 id="教务系统的学期代码"><a href="#教务系统的学期代码" class="headerlink" title="教务系统的学期代码"></a>教务系统的学期代码</h1><p>semesterid，下面会用到的。</p>
+<p>咋找出来的？在教务系统切换学期经典找规律。。我也不知道为什么18到19跳了这么远</p>
+<p>16-17年度：44,45</p>
+<p>17-18年度 ：46,48</p>
+<p>18-19年度 ：49,69</p>
+<p>19-20年度 ：89,109</p>
+<p>….</p>
+<h1 id="成绩缓存"><a href="#成绩缓存" class="headerlink" title="成绩缓存"></a>成绩缓存</h1><h2 id="在线数据保存到内存"><a href="#在线数据保存到内存" class="headerlink" title="在线数据保存到内存"></a>在线数据保存到内存</h2><p>这里我就默认查19-20年度第一学期的成绩，semesterid是89</p>
+<p>对于教务处的成绩查询URL如下</p>
+<p><code>http://jwc3.yangtzeu.edu.cn/eams/teach/grade/course/person!search.action?semesterId=89</code></p>
+<p>这个页面应该是某个JS绘制出来的，虽然我当时没找到就是了</p>
+<p>总体思路就是用BeautifulSoup去解析，然后处理信息把每一科地信息搞成一个字典，再把字典集合放到列表里</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def getGrade():</span><br><span class="line">    response_grade &#x3D; login_session.get(&#39;http:&#x2F;&#x2F;jwc3.yangtzeu.edu.cn&#x2F;eams&#x2F;teach&#x2F;grade&#x2F;course&#x2F;person!search.action?semesterId&#x3D;89&#39;)</span><br><span class="line">    # 防止编码问题</span><br><span class="line">    response_grade.encoding&#x3D;&#39;utf-8&#39;</span><br><span class="line">    response_grade_soup &#x3D; BeautifulSoup(response_grade.text, &#39;html.parser&#39;,)</span><br><span class="line">    # 填充表头</span><br><span class="line">    gridhead &#x3D; response_grade_soup.find(&#39;thead&#39;, &#123;&#39;class&#39;: &#39;gridhead&#39;&#125;).find_all(&#39;th&#39;)</span><br><span class="line">    firstLine &#x3D; []</span><br><span class="line">    for each in gridhead:</span><br><span class="line">        firstLine.append(each.get_text())</span><br><span class="line">   # 一个科目一行，迭代&lt;tr&gt;标签,对应地写数据</span><br><span class="line">    subjects_info &#x3D; []</span><br><span class="line">    Trees &#x3D; response_grade_soup.find(&#39;tbody&#39;).find_all(&#39;tr&#39;)</span><br><span class="line">    for tr in Trees:</span><br><span class="line">        row &#x3D; []</span><br><span class="line">        for td in tr:</span><br><span class="line">            astr &#x3D; str(td.string)</span><br><span class="line">            if astr.strip() !&#x3D; &#39;&#39;: #滤掉空白字符串</span><br><span class="line">                astr_fixed &#x3D; &#39;&#39;.join(astr.split()) #去掉空格符 制表符和换行符</span><br><span class="line">                row.append(astr_fixed)</span><br><span class="line">            else:</span><br><span class="line">                pass</span><br><span class="line">        # 对于每一个科目都生成一个字典         </span><br><span class="line">        subject_info &#x3D; dict(zip(firstLine,row))</span><br><span class="line">        # 将所有科目的字典搞到一个列表</span><br><span class="line">        subjects_info.append(subject_info)</span><br><span class="line">    return subjects_info</span><br><span class="line">subjects_info &#x3D; getGrade()</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存数据序列化"><a href="#内存数据序列化" class="headerlink" title="内存数据序列化"></a>内存数据序列化</h2><p>这部分就比较简单了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def grade2csv():</span><br><span class="line">    # 创建一个CSV文件</span><br><span class="line">    csvout &#x3D; open(&#39;grade.csv&#39;, &#39;w&#39;, encoding&#x3D;&#39;gbk&#39;, newline&#x3D;&#39;&#39;)</span><br><span class="line">    # 创建一个csv.writer</span><br><span class="line">    writer &#x3D; csv.writer(csvout)</span><br><span class="line">    # 表头</span><br><span class="line">    firstLine &#x3D; [&#39;学年学期&#39;, &#39;课程代码&#39;, &#39;课程序号&#39;, &#39;课程名称&#39;, &#39;课程类别&#39;, &#39;学分&#39;, &#39;总评成绩&#39;, &#39;最终&#39;, &#39;绩点&#39;]</span><br><span class="line">    writer.writerow(firstLine)</span><br><span class="line">    # 逐行写入每科信息</span><br><span class="line">    for dict_subject in subjects_info:</span><br><span class="line">        row &#x3D; []</span><br><span class="line">        for value in dict_subject.values():</span><br><span class="line">            row.append(value)</span><br><span class="line">        writer.writerow(row)</span><br></pre></td></tr></table></figure>
+
+<p>最后目录下就有一个漂亮的成绩表了<img src="/2020/06/23/%E9%95%BF%E6%B1%9F%E5%A4%A7%E5%AD%A6%E6%95%99%E5%8A%A1%E5%A4%84%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95%E5%8F%8A%E6%88%90%E7%BB%A9%E7%BC%93%E5%AD%98/1.png" alt="1"></p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95/" rel="tag">模拟登录</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/23/LeagueClient%E9%80%9A%E4%BF%A1-0-%E5%A6%82%E4%BD%95%E8%AE%A9%E7%86%8A%E5%AD%A9%E5%AD%90%E7%8E%A9%E4%B8%8D%E4%BA%86LOL/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">LeagueClient通信(0)-如何让熊孩子玩不了LOL</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020
+        <i class="ri-heart-fill heart_icon"></i> BakaFT
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        Powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+        <span class="division">|</span>
+        Theme - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Index</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">Categories</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">Tags</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/projects">Projects</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/oneindex.html">OneIndex</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About me</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="https://lib.baomitu.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/jieyou/lazyload@1.4.2/lazyload.min.js"></script>
+
+<!-- Subtitle -->
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+      startDelay: 0,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+    console.log(err)
+  }
+</script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bakaft/bakaft.github.io@1.0/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+    
+  </div>
+</body>
+
+</html>
